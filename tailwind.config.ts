@@ -28,7 +28,8 @@ const config: Config = {
       body: "#6C6F93",
       primary: {
         DEFAULT: "#AE7151",
-        dark: "#895539"
+        dark: "#895539",
+        hover: "#6A4D36"
       },
       meta: {
         DEFAULT: "#F7F9FC",
