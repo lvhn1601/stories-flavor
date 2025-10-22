@@ -9,12 +9,17 @@ import { useSelector } from "react-redux";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import data from "../Home/Categories/categoryData";
+import UserDropdown from "./UserDropdown";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
   const { openCartModal } = useCartModalContext();
+
+  const { data: session } = useSession();
 
   const product = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
@@ -55,18 +60,22 @@ const Header = () => {
               <span className="hidden xl:block w-px h-7.5 bg-gray-4"></span>
 
               <div className="flex w-full lg:w-auto justify-between items-center gap-5">
-                <div className="flex items-center gap-5">
-                  <Link href="/signin" className="flex items-center gap-2.5">
-                    <p className="font-medium text-custom-xs text-white">
-                      Đăng ký
-                    </p>
-                  </Link>
-                  <Link href="/signin" className="flex items-center gap-2.5">
-                    <div className="font-medium border bg-primary-dark rounded-md px-2 py-1 text-custom-xs text-white">
-                      Đăng nhập
-                    </div>
-                  </Link>
-                </div>
+                {session?.user ? (
+                  <UserDropdown user={session.user} />
+                ) : (
+                  <div className="flex items-center gap-5">
+                    <Link href="/signin" className="flex items-center gap-2.5">
+                      <p className="font-medium text-custom-xs text-white">
+                        Đăng ký
+                      </p>
+                    </Link>
+                    <Link href="/signin" className="flex items-center gap-2.5">
+                      <div className="font-medium border bg-primary-dark rounded-md px-2 py-1 text-custom-xs text-white">
+                        Đăng nhập
+                      </div>
+                    </Link>
+                  </div>
+                )}
 
                 {/* <!-- Hamburger Toggle BTN --> */}
                 <button

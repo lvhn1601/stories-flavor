@@ -1,8 +1,14 @@
-import Breadcrumb from "@/components/Common/Breadcrumb";
+"use client";
+
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
 const Signin = () => {
+  const handleGoogleSignin = () => {
+    signIn("google", { callbackUrl: "/" });
+  }
+
   return (
     <>
       {/* <Breadcrumb title={"Signin"} pages={["Signin"]} /> */}
@@ -66,7 +72,11 @@ const Signin = () => {
                 </span>
 
                 <div className="flex flex-col gap-4.5 mt-4.5">
-                  <button className="flex justify-center items-center gap-3.5 rounded-lg border border-gray-3 bg-gray-1 p-3 ease-out duration-200 hover:bg-gray-2">
+                  <button 
+                    className="flex justify-center items-center gap-3.5 rounded-lg border border-gray-3 bg-gray-1 p-3 ease-out duration-200 hover:bg-gray-2" 
+                    type="button"
+                    onClick={handleGoogleSignin}
+                  >
                     <svg
                       width="20"
                       height="20"

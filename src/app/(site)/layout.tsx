@@ -14,6 +14,7 @@ import PreviewSliderModal from "@/components/Common/PreviewSlider";
 
 import ScrollToTop from "@/components/Common/ScrollToTop";
 import PreLoader from "@/components/Common/PreLoader";
+import { SessionProvider } from "next-auth/react";
 
 export default function RootLayout({
   children,
@@ -23,23 +24,25 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body>
-        <ReduxProvider>
-          <CartModalProvider>
-            <ModalProvider>
-              <PreviewSliderProvider>
-                <Header />
-                <PreLoader />
-                {children}
+        <SessionProvider>
+          <ReduxProvider>
+            <CartModalProvider>
+              <ModalProvider>
+                <PreviewSliderProvider>
+                  <Header />
+                  <PreLoader />
+                  {children}
 
-                <QuickViewModal />
-                <CartSidebarModal />
-                <PreviewSliderModal />
-              </PreviewSliderProvider>
-            </ModalProvider>
-          </CartModalProvider>
-        </ReduxProvider>
-        <ScrollToTop />
-        <Footer />
+                  <QuickViewModal />
+                  <CartSidebarModal />
+                  <PreviewSliderModal />
+                </PreviewSliderProvider>
+              </ModalProvider>
+            </CartModalProvider>
+          </ReduxProvider>
+          <ScrollToTop />
+          <Footer />
+        </SessionProvider>
       </body>
     </html>
   );

@@ -11,7 +11,7 @@ export const authOptions = {
     ],
     callbacks: {
         async signIn({ user }: { user: { email?: string | null } }) {
-            if (!user.email) return false
+            if (!user.email) return false;
 
             let existingUser = await prisma.user.findUnique({
                 where: { email: user.email, isActivated: true },
