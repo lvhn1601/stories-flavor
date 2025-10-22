@@ -5,8 +5,8 @@ import testimonialsData from "./testimonialsData";
 import Image from "next/image";
 
 // Import Swiper styles
-import "swiper/css/navigation";
-import "swiper/css";
+// import "swiper/css/navigation";
+// import "swiper/css";
 import SingleItem from "./SingleItem";
 
 const Testimonials = () => {
@@ -23,26 +23,15 @@ const Testimonials = () => {
   }, []);
 
   return (
-    <section className="overflow-hidden pb-16.5">
+    <section className="overflow-hidden my-10 pb-16.5">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
         <div className="">
           <div className="swiper testimonial-carousel common-carousel p-5">
             {/* <!-- section title --> */}
             <div className="mb-10 flex items-center justify-between">
-              <div>
-                <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
-                  <Image
-                    src="/images/icons/icon-08.svg"
-                    alt="icon"
-                    width={17}
-                    height={17}
-                  />
-                  Testimonials
-                </span>
-                <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-                  User Feedbacks
-                </h2>
-              </div>
+              <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
+                Feedback từ khách hàng
+              </h2>
 
               <div className="flex items-center gap-3">
                 <div onClick={handlePrev} className="swiper-button-prev">
