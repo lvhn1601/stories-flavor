@@ -4,6 +4,7 @@ import PromoBanner from "./PromoBanner";
 import Testimonials from "./Testimonials";
 import Collection from "../Colllection";
 import Stages from "./Stages";
+import Stories from "./Stories";
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
       <Collection />
       {/* <BestSeller /> */}
       <Testimonials />
+      <Stories />
       <PromoBanner />
     </main>
   );

@@ -30,10 +30,10 @@ const Stages = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-x-7.5 gap-y-9">
           {/* <!-- New Arrivals item --> */}
           {stages.map((item, index) => {
-            if (index / 2 === 0)
+            if (index % 2 === 0)
               return (
                 <>
-                  <div className="relative overflow-hidden flex items-center justify-center rounded-lg max-h-[60vh] shadow-lg">
+                  <div id={`image-${item.id}`} className="relative overflow-hidden flex items-center justify-center rounded-lg max-h-[60vh] shadow-lg">
                     <Image
                       src={item.image}
                       alt=""
@@ -42,7 +42,7 @@ const Stages = () => {
                       height={1080}
                     />
                   </div>
-                  <div className="w-full flex justify-center">
+                  <div id={`title-${item.id}`} className="w-full flex justify-center">
                     <h3 className="font-medium text-lg text-dark mt-4">
                       {item.title}
                     </h3>
@@ -52,12 +52,12 @@ const Stages = () => {
             else {
               return (
                 <>
-                  <div className="w-full hidden sm:flex justify-center">
+                  <div id={`tile-${item.id}-top`} className="w-full hidden sm:flex justify-center">
                     <h3 className="font-medium text-lg text-dark mt-4">
                       {item.title}
                     </h3>
                   </div>
-                  <div className="relative overflow-hidden flex items-center justify-center rounded-lg max-h-[60vh] shadow-lg">
+                  <div id={`image-${item.id}`} className="relative overflow-hidden flex items-center justify-center rounded-lg max-h-[60vh] shadow-lg">
                     <Image
                       src={item.image}
                       alt=""
@@ -66,7 +66,7 @@ const Stages = () => {
                       height={1080}
                     />
                   </div>
-                  <div className="w-full flex sm:hidden justify-center">
+                  <div id={`tile-${item.id}-bot`} className="w-full flex sm:hidden justify-center">
                     <h3 className="font-medium text-lg text-dark mt-4">
                       {item.title}
                     </h3>
