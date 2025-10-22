@@ -49,7 +49,7 @@ const CoreValue = () => {
                   width={1080}
                   height={1080}
                 />
-                <h3 className="px-10 w-3/4 font-medium text-lg text-dark mt-4">
+                <h3 className="px-10 w-3/4 font-medium text-base lg:text-lg text-dark">
                   {item.title}
                 </h3>
               </div>
@@ -57,7 +57,7 @@ const CoreValue = () => {
           else {
             return (
               <div id={`${item.id}`} className="flex justify-start items-center w-full bg-gray-4">
-                <h3 className="px-10 w-3/4 font-medium text-lg text-dark mt-4">
+                <h3 className="px-10 w-3/4 font-medium text-base lg:text-lg text-dark">
                   {item.title}
                 </h3>
                 <Image

@@ -7,11 +7,14 @@ import Stories from "../Home/Stories";
 import PromoBanner from "../Home/PromoBanner";
 import Image from "next/image";
 import CoreValue from "./CoreValue";
+import Missions from "./Missions";
+import Team from "./Team";
+import Partners from "./Partners";
 
 const Introduce = () => {
   return (
     <main>
-      <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 mt-36">
+      <div className="max-w-[1170px] w-full flex flex-col gap-10 mx-auto px-4 sm:px-8 xl:px-0 mt-36">
         <h1 className="font-bold text-2xl xl:text-heading-4 text-dark text-center">
           Giới thiệu
         </h1>
@@ -42,15 +45,13 @@ const Introduce = () => {
             </ul>
           </div>
         </div>
-        <Stages />
+        <Missions />
         <CoreValue />
+        <Team />
+        <Partners />
+        {/* <Stories /> */}
+        <PromoBanner />
       </div>
-      {/* <Hero /> */}
-      <Collection />
-      {/* <BestSeller /> */}
-      <Testimonials />
-      <Stories />
-      <PromoBanner />
     </main>
   );
 };
