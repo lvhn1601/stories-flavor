@@ -42,7 +42,7 @@ const Header = () => {
   });
 
   return (
-    <header className={`fixed left-0 top-0 w-full z-9999 bg-primary transition-all ease-in-out duration-300 shadow`}>
+    <header className={`fixed left-0 top-0 w-full z-999 bg-primary transition-all ease-in-out duration-300 shadow`}>
       <div className="border-t border-gray-3">
         <div className="flex flex-col max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
           {/* <!-- header top start --> */}

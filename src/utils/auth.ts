@@ -14,7 +14,7 @@ export const authOptions = {
             if (!user.email) return false;
 
             let existingUser = await prisma.user.findUnique({
-                where: { email: user.email, isActivated: true },
+                where: { email: user.email },
             })
 
             if (!existingUser) {

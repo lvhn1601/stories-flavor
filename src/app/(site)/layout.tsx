@@ -1,20 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
-import "../css/style.css";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
 
-import { ModalProvider } from "../context/QuickViewModalContext";
-import { CartModalProvider } from "../context/CartSidebarModalContext";
 import { ReduxProvider } from "@/redux/provider";
-import QuickViewModal from "@/components/Common/QuickViewModal";
-import CartSidebarModal from "@/components/Common/CartSidebarModal";
+import { CartModalProvider } from "../context/CartSidebarModalContext";
+import { ModalProvider } from "../context/QuickViewModalContext";
 import { PreviewSliderProvider } from "../context/PreviewSliderContext";
+import Header from "@/components/Header";
+import CartSidebarModal from "@/components/Common/CartSidebarModal";
 import PreviewSliderModal from "@/components/Common/PreviewSlider";
-
 import ScrollToTop from "@/components/Common/ScrollToTop";
-import PreLoader from "@/components/Common/PreLoader";
+import Footer from "@/components/Footer";
 import { SessionProvider } from "next-auth/react";
+import SessionCheck from "@/components/Common/SessionCheck";
 
 export default function RootLayout({
   children,
@@ -22,28 +18,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning={true}>
-      <body>
-        <SessionProvider>
-          <ReduxProvider>
-            <CartModalProvider>
-              <ModalProvider>
-                <PreviewSliderProvider>
-                  <Header />
-                  <PreLoader />
-                  {children}
+    <SessionProvider>
+      <SessionCheck>
+        <ReduxProvider>
+          <CartModalProvider>
+            <ModalProvider>
+              <PreviewSliderProvider>
+                <Header />
+                {children}
 
-                  <QuickViewModal />
-                  <CartSidebarModal />
-                  <PreviewSliderModal />
-                </PreviewSliderProvider>
-              </ModalProvider>
-            </CartModalProvider>
-          </ReduxProvider>
-          <ScrollToTop />
-          <Footer />
-        </SessionProvider>
-      </body>
-    </html>
+                {/* <QuickViewModal /> */}
+                <CartSidebarModal />
+                <PreviewSliderModal />
+              </PreviewSliderProvider>
+            </ModalProvider>
+          </CartModalProvider>
+        </ReduxProvider>
+        <ScrollToTop />
+        <Footer />
+      </SessionCheck>
+    </SessionProvider>
   );
 }

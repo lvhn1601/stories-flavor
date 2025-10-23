@@ -32,7 +32,7 @@ const Stages = () => {
           {stages.map((item, index) => {
             if (index % 2 === 0)
               return (
-                <>
+                <React.Fragment key={item.id || index}>
                   <div id={`image-${item.id}`} className="relative overflow-hidden flex items-center justify-center rounded-lg max-h-[60vh] shadow-lg">
                     <Image
                       src={item.image}
@@ -47,11 +47,11 @@ const Stages = () => {
                       {item.title}
                     </h3>
                   </div>
-                </>
+                </React.Fragment>
               );
             else {
               return (
-                <>
+                <React.Fragment key={item.id || index}>
                   <div id={`tile-${item.id}-top`} className="w-full hidden sm:flex justify-center">
                     <h3 className="font-medium text-lg text-dark mt-4">
                       {item.title}
@@ -71,7 +71,7 @@ const Stages = () => {
                       {item.title}
                     </h3>
                   </div>
-                </>
+                </React.Fragment>
               );
             }
           })}
