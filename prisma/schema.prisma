@@ -13,6 +13,7 @@ model User {
   phone       String?  @unique
   name        String?  @unique
   password    String?
+  image       String?
   role        String   @default("user")
   isActivated Boolean  @default(false)
   created_at  DateTime @default(now())
