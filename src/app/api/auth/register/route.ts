@@ -1,18 +1,18 @@
-import { authOptions } from "@/utils/auth";
 import { ROLE } from "@/utils/constant";
 import { prisma } from "@/utils/prisma";
 import { hash } from "bcryptjs";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-    const session = await getServerSession(authOptions);
-
-    if (!session || !session.user || session.user.role != ROLE.USER) {
-        return NextResponse.json({ data: false }, { status: 403 });
-    }
-
     const body = await request.json();
+
+    const existingEmail = await prisma.user.findUnique({
+        where: { email: body.email },
+    });
+
+    if (existingEmail) {
+        return NextResponse.json({ message: "Email đã được sử dụng, vui lòng thử lại với email khác!" }, { status: 400 });
+    }
 
     const existingPhone = await prisma.user.findUnique({
         where: { phone: body.phone },
@@ -24,18 +24,19 @@ export async function POST(request: Request) {
 
     const hashedPassword = await hash(body.password, 10)
 
-    const res = await prisma.user.update({
-        where: { id: session.user.id, email: session.user.email! },
+    const res = await prisma.user.create({
         data: {
             name: body.name,
+            email: body.email,
             phone: body.phone,
             password: hashedPassword,
+            role: ROLE.USER,
             isActivated: true,
         },
     });
 
     if (!res) {
-        return NextResponse.json({ message: "Kích hoạt tài khoản thất bại, vui lòng thử lại sau!" }, { status: 500 });
+        return NextResponse.json({ message: "Đăng ký thất bại, vui lòng thử lại sau!" }, { status: 500 });
     }
 
     return NextResponse.json({ data: true }, { status: 200 });

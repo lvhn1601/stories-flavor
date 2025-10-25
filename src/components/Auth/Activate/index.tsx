@@ -35,13 +35,18 @@ const Activate = ({ user }: { user: User }) => {
   };
 
   useEffect(() => {
+    if (!formData.name && !formData.phone && !formData.password && !formData.reTypePassword) {
+      setError(null);
+      return;
+    }
+
     if (!formData.name || !formData.phone || !formData.password) {
       setError("Vui lòng điền đầy đủ thông tin");
       return;
     }
 
     const phone = formData.phone.trim().replace(/[\s-]/g, "");
-    const phoneRegex = /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/; // VN mobile: +84XXXXXXXXX or 0XXXXXXXXX with valid prefixes
+    const phoneRegex = /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/;
     if (!phoneRegex.test(phone)) {
       setError("Số điện thoại không hợp lệ");
       return;
@@ -66,7 +71,7 @@ const Activate = ({ user }: { user: User }) => {
       name: formData.name,
       phone: formData.phone,
       password: formData.password,
-    });
+    }, true, true);
 
     if (res.success) router.push("/");
   }
@@ -175,7 +180,7 @@ const Activate = ({ user }: { user: User }) => {
                 <button
                   type="submit"
                   className="w-full flex justify-center font-medium text-white bg-primary py-3 px-6 rounded-lg ease-out duration-200 hover:bg-primary-hover mt-7.5"
-                  disabled={error !== null}
+                  disabled={!!error || !formData.name || !formData.phone || !formData.password || !formData.reTypePassword}
                 >
                   Xác thực
                 </button>

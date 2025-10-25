@@ -1,8 +1,77 @@
-import Breadcrumb from "@/components/Common/Breadcrumb";
+"use client";
+
+import { useAPI } from "@/hooks/useAPI";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const Signup = () => {
+  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    reTypePassword: "",
+  });
+
+  const router = useRouter();
+
+  const { API } = useAPI();
+
+  useEffect(() => {
+    if (!formData.name && !formData.email && !formData.phone && !formData.password && !formData.reTypePassword) {
+      setError(null);
+      return;
+    }
+
+    if (!formData.name || !formData.email || !formData.phone || !formData.password) {
+      setError("Vui lòng điền đầy đủ thông tin");
+      return;
+    }
+
+    const email = formData.email.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Email không hợp lệ");
+      return;
+    }
+
+    const phone = formData.phone.trim().replace(/[\s-]/g, "");
+    const phoneRegex = /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/;
+    if (!phoneRegex.test(phone)) {
+      setError("Số điện thoại không hợp lệ");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Mật khẩu phải có ít nhất 6 ký tự");
+      return;
+    }
+
+    if (formData.password !== formData.reTypePassword) {
+      setError("Mật khẩu xác thực không khớp");
+      return;
+    };
+
+    setError(null);
+  }, [formData]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const res = await API.post("/auth/register", {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      password: formData.password,
+    }, true, true);
+
+    if (res.success) {
+      router.push("/signin");
+    }
+  }
+
   return (
     <>
       {/* <Breadcrumb title={"Signup"} pages={["Signup"]} /> */}
@@ -70,7 +139,7 @@ const Signup = () => {
             </span>
 
             <div className="mt-5.5">
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="mb-5">
                   <label htmlFor="name" className="block mb-2.5">
                     Tên của bạn <span className="text-red">*</span>
@@ -82,6 +151,8 @@ const Signup = () => {
                     id="name"
                     placeholder="Nhập tên của bạn"
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
+                    value={formData.name}
+                    onChange={e => setFormData({ ...formData, name: e.target.value })}
                   />
                 </div>
 
@@ -96,6 +167,24 @@ const Signup = () => {
                     id="email"
                     placeholder="Nhập địa chỉ email"
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
+                    value={formData.email}
+                    onChange={e => setFormData({ ...formData, email: e.target.value })}
+                  />
+                </div>
+
+                <div className="mb-5">
+                  <label htmlFor="phone" className="block mb-2.5">
+                    Số điện thoại <span className="text-red">*</span>
+                  </label>
+
+                  <input
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    placeholder="Nhập số điện thoại"
+                    className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
+                    value={formData.phone}
+                    onChange={e => setFormData({ ...formData, phone: e.target.value })}
                   />
                 </div>
 
@@ -111,6 +200,8 @@ const Signup = () => {
                     placeholder="Nhập mật khẩu"
                     autoComplete="on"
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
+                    value={formData.password}
+                    onChange={e => setFormData({ ...formData, password: e.target.value })}
                   />
                 </div>
 
@@ -126,12 +217,19 @@ const Signup = () => {
                     placeholder="Nhập lại mật khẩu"
                     autoComplete="on"
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
+                    value={formData.reTypePassword}
+                    onChange={e => setFormData({ ...formData, reTypePassword: e.target.value })}
                   />
                 </div>
+
+                <p className="text-red-light text-center w-full">
+                  {error}
+                </p>
 
                 <button
                   type="submit"
                   className="w-full flex justify-center font-medium text-white bg-primary py-3 px-6 rounded-lg ease-out duration-200 hover:bg-primary-hover mt-7.5"
+                  disabled={!!error || !formData.name || !formData.email || !formData.phone || !formData.password}
                 >
                   Đăng ký
                 </button>

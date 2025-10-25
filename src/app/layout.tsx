@@ -22,7 +22,7 @@ export default function RootLayout({
         <link rel="icon" href={THEME.LOGO} />
       </head>
       <body>
-        <Toaster position="top-right" />
+        <Toaster position="top-right" richColors />
         <PreLoader />
         {children}
       </body>
