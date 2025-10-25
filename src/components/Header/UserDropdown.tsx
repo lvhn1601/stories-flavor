@@ -3,16 +3,8 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 
-const UserDropdown = ({ user }) => {
+const UserDropdown = ({ user, menuItem }) => {
     const [dropdownToggler, setDropdownToggler] = useState(false);
-
-    const menuItem = [
-        { title: "Tài khoản của tôi", path: "/profile" },
-        { title: "Đơn mua", path: "/orders" },
-        { title: "Đăng xuất", path: "#", action: () => {
-            signOut({ callbackUrl: "/" });
-        } },
-    ]
 
     return (
         <div

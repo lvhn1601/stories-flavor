@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import data from "../Home/Categories/categoryData";
 import UserDropdown from "./UserDropdown";
 
@@ -21,8 +21,15 @@ const Header = () => {
 
   const { data: session } = useSession();
 
-  const product = useAppSelector((state) => state.cartReducer.items);
-  const totalPrice = useSelector(selectTotalPrice);
+  const menuItem = [
+    { title: "Tài khoản của tôi", path: "/profile" },
+    { title: "Đơn mua", path: "/orders" },
+    {
+      title: "Đăng xuất", path: "#", action: () => {
+        signOut({ callbackUrl: "/" });
+      }
+    },
+  ]
 
   const handleOpenCartModal = () => {
     openCartModal();
@@ -61,7 +68,7 @@ const Header = () => {
 
               <div className="flex w-full lg:w-auto justify-between items-center gap-5">
                 {session?.user ? (
-                  <UserDropdown user={session.user} />
+                  <UserDropdown user={session.user} menuItem={menuItem} />
                 ) : (
                   <div className="flex items-center gap-5">
                     <Link href="/signin" className="flex items-center gap-2.5">
