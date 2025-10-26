@@ -58,15 +58,11 @@ const ProductModal = ({
     const files = e.target.files;
     if (!files) return;
 
-    const newImages = Array.from(files).map((file) =>
-      URL.createObjectURL(file)
-    );
-    setImageFiles((prev) => [...prev, ...Array.from(files)]);
-    setPreviewImages((prev) => [...prev, ...newImages]);
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, ...newImages],
-    }));
+    const newFiles = Array.from(files);
+    const newPreviews = newFiles.map((file) => URL.createObjectURL(file));
+
+    setImageFiles((prev) => [...prev, ...newFiles]);
+    setPreviewImages((prev) => [...prev, ...newPreviews]);
   };
 
   const handleRemoveImage = (index: number) => {
@@ -80,20 +76,38 @@ const ProductModal = ({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (product) {
-      onSave && await onSave(formData);
+      if (onSave) {
+        let updatedFormData = { ...formData };
+
+        if (imageFiles.length > 0) {
+          const imageUrls = await uploadImages(imageFiles);
+          updatedFormData = {
+            ...updatedFormData,
+            images: [...updatedFormData.images, ...imageUrls],
+          };
+        }
+
+        await onSave(updatedFormData);
+      }
     } else {
       if (onAdd) {
         const imageUrls = await uploadImages(imageFiles);
-        setFormData((prev) => ({
-          ...prev,
+        const newProduct: Product = {
+          ...formData,
           images: imageUrls,
-        }));
+        };
 
-        await onAdd(formData);
+        await onAdd(newProduct);
       }
     }
     onClose();
   };
+
+  const handleClose = () => {
+    if (product)
+      setImageFiles([]);
+    onClose();
+  }
 
   if (!isOpen) return null;
 
@@ -102,7 +116,7 @@ const ProductModal = ({
       <div className="bg-white w-full max-w-xl rounded-2xl shadow-lg p-6 relative overflow-y-auto max-h-[90vh]">
         {/* ===== Close Button ===== */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-3 right-3 text-gray-4 hover:text-gray-6"
         >
           <svg
@@ -224,7 +238,7 @@ const ProductModal = ({
           <div className="flex justify-end gap-3 pt-4">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="px-4 py-2 rounded-lg border border-gray-3 hover:bg-gray-1"
             >
               Hủy
