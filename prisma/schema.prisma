@@ -18,3 +18,19 @@ model User {
   isActivated Boolean  @default(false)
   created_at  DateTime @default(now())
 }
+
+model Product {
+  id        Int        @id @default(autoincrement())
+  name      String
+  category  Category
+  price     Float
+  status    Boolean    @default(true)
+  images    String[]
+  createdAt DateTime   @default(now())
+}
+
+enum Category {
+  OPTIONAL
+  SUGGEST
+  HIGHEND
+}

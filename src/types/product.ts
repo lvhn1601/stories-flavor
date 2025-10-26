@@ -1,11 +1,8 @@
 export type Product = {
-  title: string;
-  reviews: number;
+  id?: number;
+  name: string;
+  category: "OPTIONAL" | "SUGGEST" | "HIGHEND";
   price: number;
-  discountedPrice: number;
-  id: number;
-  imgs?: {
-    thumbnails: string[];
-    previews: string[];
-  };
+  images: string[];
+  status?: boolean;
 };

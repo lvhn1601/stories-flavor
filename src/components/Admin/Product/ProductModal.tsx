@@ -1,67 +1,109 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
-interface Product {
-  id?: number;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  status: "Active" | "Out of Stock";
-}
+import { Product } from "@/types/product";
+import { uploadImages } from "@/utils/uploadImage";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 
 interface ProductModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (product: Product) => void;
-  product?: Product | null; // null means "create"
+  onAdd?: (product: Product) => Promise<void>;
+  onSave?: (product: Product) => Promise<void>;
+  product?: Product | null;
 }
 
-const ProductModal = ({ isOpen, onClose, onSave, product }: ProductModalProps) => {
+const ProductModal = ({
+  isOpen,
+  onClose,
+  onAdd,
+  onSave,
+  product,
+}: ProductModalProps) => {
   const [formData, setFormData] = useState<Product>({
     name: "",
-    category: "",
+    category: "OPTIONAL",
     price: 0,
-    stock: 0,
-    status: "Active",
+    images: [],
   });
 
+  const [imageFiles, setImageFiles] = useState([] as File[]);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+
   useEffect(() => {
-    if (product) setFormData(product);
-    else
+    if (product) {
+      setFormData(product);
+      setPreviewImages(product.images || []);
+    } else {
       setFormData({
         name: "",
-        category: "",
+        category: "OPTIONAL",
         price: 0,
-        stock: 0,
-        status: "Active",
+        images: [],
       });
+      setPreviewImages([]);
+    }
   }, [product]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "price" || name === "stock" ? Number(value) : value,
+      [name]: name === "price" ? Number(value) : value,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const newImages = Array.from(files).map((file) =>
+      URL.createObjectURL(file)
+    );
+    setImageFiles((prev) => [...prev, ...Array.from(files)]);
+    setPreviewImages((prev) => [...prev, ...newImages]);
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ...newImages],
+    }));
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    if (product) {
+      onSave && await onSave(formData);
+    } else {
+      if (onAdd) {
+        const imageUrls = await uploadImages(imageFiles);
+        setFormData((prev) => ({
+          ...prev,
+          images: imageUrls,
+        }));
+
+        await onAdd(formData);
+      }
+    }
     onClose();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999]">
-      <div className="bg-white w-full max-w-lg rounded-2xl shadow-lg p-6 relative">
+    <div className="fixed inset-0 bg-dark/70 flex items-center justify-center z-[9999]">
+      <div className="bg-white w-full max-w-xl rounded-2xl shadow-lg p-6 relative overflow-y-auto max-h-[90vh]">
         {/* ===== Close Button ===== */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+          className="absolute top-3 right-3 text-gray-4 hover:text-gray-6"
         >
           <svg
             className="w-6 h-6"
@@ -70,20 +112,25 @@ const ProductModal = ({ isOpen, onClose, onSave, product }: ProductModalProps) =
             strokeWidth={1.5}
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
 
         {/* ===== Title ===== */}
         <h2 className="text-xl font-semibold mb-6">
-          {product ? "Edit Product" : "Add New Product"}
+          {product ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới"}
         </h2>
 
         {/* ===== Form ===== */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Product Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Product Name
+            <label className="block text-sm font-medium text-gray-7 mb-1">
+              Tên sản phẩm
             </label>
             <input
               type="text"
@@ -91,85 +138,102 @@ const ProductModal = ({ isOpen, onClose, onSave, product }: ProductModalProps) =
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full border border-gray-3 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
             />
           </div>
 
+          {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Category
+            <label className="block text-sm font-medium text-gray-7 mb-1">
+              Danh mục
             </label>
-            <input
-              type="text"
+            <select
               name="category"
               value={formData.category}
               onChange={handleChange}
-              required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Price ($)
-              </label>
-              <input
-                type="number"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                min={0}
-                required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Stock
-              </label>
-              <input
-                type="number"
-                name="stock"
-                value={formData.stock}
-                onChange={handleChange}
-                min={0}
-                required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Status
-            </label>
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full border border-gray-3 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
             >
-              <option value="Active">Active</option>
-              <option value="Out of Stock">Out of Stock</option>
+              <option value="OPTIONAL">Tùy Hương</option>
+              <option value="SUGGEST">Tinh Tuyển</option>
+              <option value="HIGHEND">Thượng Vị</option>
             </select>
           </div>
 
-          {/* ===== Actions ===== */}
+          {/* Price */}
+          <div>
+            <label className="block text-sm font-medium text-gray-7 mb-1">
+              Giá (VNĐ)
+            </label>
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              min={0}
+              required
+              className="w-full border border-gray-3 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
+            />
+          </div>
+
+          {/* Image Upload */}
+          <div>
+            <label className="block text-sm font-medium text-gray-7 mb-2">
+              Hình ảnh sản phẩm
+            </label>
+
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="block w-full text-sm text-gray-6
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-lg file:border-0
+                file:text-sm file:font-medium
+                file:bg-gray-1 file:text-gray-7
+                hover:file:bg-gray-2"
+            />
+
+            {/* Preview */}
+            {previewImages.length > 0 && (
+              <div className="mt-3 grid grid-cols-3 gap-3">
+                {previewImages.map((img, index) => (
+                  <div
+                    key={index}
+                    className="relative group border rounded-lg overflow-hidden"
+                  >
+                    <img
+                      src={img}
+                      alt={`Product ${index}`}
+                      className="w-full h-24 object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(index)}
+                      className="absolute top-1 right-1 bg-dark/50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Actions */}
           <div className="flex justify-end gap-3 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100"
+              className="px-4 py-2 rounded-lg border border-gray-3 hover:bg-gray-1"
             >
-              Cancel
+              Hủy
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+              className="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-hover"
             >
-              {product ? "Save Changes" : "Create Product"}
+              {product ? "Lưu thay đổi" : "Thêm sản phẩm"}
             </button>
           </div>
         </form>
