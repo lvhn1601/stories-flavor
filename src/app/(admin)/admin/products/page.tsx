@@ -20,7 +20,7 @@ const ProductManagementPage = () => {
   }, []);
 
   const loadProducts = async () => {
-    const res = await API.get("/admin/products", true);
+    const res = await API.get("/admin/products", false, true);
     if (res.success) {
       setProducts(res.data);
     }

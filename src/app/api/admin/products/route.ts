@@ -20,7 +20,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, category, price, images, status = true } = body;
+    const { name, category, description, price, images, status = true } = body;
 
     if (!name || !category || !price || !Array.isArray(images)) {
       return NextResponse.json(
@@ -41,6 +41,7 @@ export async function POST(req: Request) {
       data: {
         name,
         category,
+        description,
         price,
         status,
         images,
@@ -60,7 +61,7 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { id, name, category, price, images, status } = body;
+    const { id, name, category, description, price, images, status } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -82,6 +83,7 @@ export async function PUT(req: Request) {
       data: {
         name,
         category,
+        description,
         price,
         images,
         status,

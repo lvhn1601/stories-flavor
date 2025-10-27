@@ -2,7 +2,12 @@
 
 import { Product } from "@/types/product";
 import { uploadImages } from "@/utils/uploadImage";
+import dynamic from "next/dynamic";
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+
+import "react-quill-new/dist/quill.snow.css";
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -22,6 +27,7 @@ const ProductModal = ({
   const [formData, setFormData] = useState<Product>({
     name: "",
     category: "OPTIONAL",
+    description: "",
     price: 0,
     images: [],
   });
@@ -31,22 +37,29 @@ const ProductModal = ({
 
   useEffect(() => {
     if (product) {
-      setFormData(product);
+      setFormData({
+        id: product.id,
+        name: product.name,
+        description: product.description || "",
+        category: product.category,
+        price: product.price,
+        images: product.images || [],
+      });
       setPreviewImages(product.images || []);
     } else {
       setFormData({
         name: "",
+        description: "",
         category: "OPTIONAL",
         price: 0,
         images: [],
       });
       setPreviewImages([]);
     }
-  }, [product]);
+  }, [product, isOpen]); // 👈 thêm `isOpen` để reset khi mở modal
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -112,8 +125,8 @@ const ProductModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-dark/70 flex items-center justify-center z-[9999]">
-      <div className="bg-white w-full max-w-xl rounded-2xl shadow-lg p-6 relative overflow-y-auto max-h-[90vh]">
+    <div className="fixed inset-0 bg-dark/70 flex items-center justify-center z-[999]">
+      <div className="bg-white w-full max-w-4xl rounded-2xl shadow-lg p-6 relative overflow-y-auto max-h-[90vh]">
         {/* ===== Close Button ===== */}
         <button
           onClick={handleClose}
@@ -171,6 +184,24 @@ const ProductModal = ({
               <option value="SUGGEST">Tinh Tuyển</option>
               <option value="HIGHEND">Thượng Vị</option>
             </select>
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-medium text-gray-7 mb-1">
+              Mô tả sản phẩm
+            </label>
+            <ReactQuill
+              key={product?.id || "new"} // 👈 ép ReactQuill unmount + remount khi đổi sản phẩm
+              theme="snow"
+              value={formData.description || ""}
+              onChange={(value) =>
+                setFormData((prev) => ({ ...prev, description: value }))
+              }
+              className="bg-white rounded-lg border border-gray-3"
+              placeholder="Nhập mô tả chi tiết sản phẩm..."
+            />
+
           </div>
 
           {/* Price */}

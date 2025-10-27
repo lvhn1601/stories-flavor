@@ -38,10 +38,10 @@ const CoreValue = () => {
 
       <div className="flex flex-col gap-6">
         {/* <!-- New Arrivals item --> */}
-        {values.map((item, index) => {
-          if (index % 2 === 0)
-            return (
-              <div id={`${item.id}`} className="flex justify-start items-center w-full bg-gray-4">
+        {values.map((item, index) => (
+          <div id={`${item.id}`} className="flex justify-start items-center w-full bg-gray-4">
+            {index % 2 === 0 ? (
+              <>
                 <Image
                   src={item.image}
                   alt="image"
@@ -52,11 +52,9 @@ const CoreValue = () => {
                 <h3 className="px-10 w-3/4 font-medium text-base lg:text-lg text-dark">
                   {item.title}
                 </h3>
-              </div>
-            );
-          else {
-            return (
-              <div id={`${item.id}`} className="flex justify-start items-center w-full bg-gray-4">
+              </>
+            ) : (
+              <>
                 <h3 className="px-10 w-3/4 font-medium text-base lg:text-lg text-dark">
                   {item.title}
                 </h3>
@@ -67,10 +65,10 @@ const CoreValue = () => {
                   width={1080}
                   height={1080}
                 />
-              </div>
-            );
-          }
-        })}
+              </>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

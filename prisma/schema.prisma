@@ -23,6 +23,7 @@ model Product {
   id        Int        @id @default(autoincrement())
   name      String
   category  Category
+  description String?
   price     Float
   status    Boolean    @default(true)
   images    String[]
