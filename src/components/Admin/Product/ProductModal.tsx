@@ -33,6 +33,7 @@ const ProductModal = ({
     province: "",
     images: [],
   });
+  const [error, setError] = useState<string | null>(null);
 
   const [imageFiles, setImageFiles] = useState([] as File[]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -57,7 +58,7 @@ const ProductModal = ({
     if (product) {
       setFormData({
         id: product.id,
-        name: product.name,
+        name: product.name.trim(),
         description: product.description || "",
         category: product.category,
         price: product.price,
@@ -99,6 +100,11 @@ const ProductModal = ({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!checkForm()) {
+      return;
+    }
+
     if (product) {
       if (onSave) {
         let updatedFormData = { ...formData };
@@ -130,6 +136,26 @@ const ProductModal = ({
   const handleClose = () => {
     // clearForm();
     onClose();
+  }
+
+  const checkForm = () => {
+    if (!formData.name.trim()) {
+      setError("Vui lòng nhập tên sản phẩm!");
+      return false;
+    }
+
+    if (formData.price <= 0) {
+      setError("Vui lòng nhập giá sản phẩm!");
+      return false;
+    }
+
+    if (!formData.province) {
+      setError("Vui lòng chọn tỉnh thành của sản phẩm!");
+      return false;
+    }
+
+    setError(null);
+    return true;
   }
 
   if (!isOpen) return null;
@@ -174,7 +200,6 @@ const ProductModal = ({
               name="name"
               value={formData.name}
               onChange={handleChange}
-              required
               className="w-full border border-gray-3 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
             />
           </div>
@@ -187,7 +212,13 @@ const ProductModal = ({
             <select
               name="category"
               value={formData.category}
-              onChange={handleChange}
+              onChange={(e) => {
+                setFormData({
+                  ...formData,
+                  province: e.target.value === "OPTIONAL" ? "" : "bac"
+                });
+                handleChange(e);
+              }}
               className="w-full border border-gray-3 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
             >
               <option value="OPTIONAL">Tùy Hương</option>
@@ -235,7 +266,23 @@ const ProductModal = ({
             <label className="block text-sm font-medium text-gray-7 mb-1">
               Tỉnh thành
             </label>
-            <VietnamMap value={formData.province} onProvinceClick={(pid) => setFormData({ ...formData, province: pid })} />
+            {formData.category === "OPTIONAL" ? (
+              <VietnamMap
+                value={formData.province}
+                onProvinceClick={(pid) => setFormData({ ...formData, province: pid })}
+              />
+            ) : (
+              <select
+                name="province"
+                value={formData.province}
+                onChange={handleChange}
+                className="w-full border border-gray-3 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
+              >
+                <option value="bac">Miền Bắc</option>
+                <option value="trung">Miền Trung</option>
+                <option value="nam">Miền Nam</option>
+              </select>
+            )}
           </div>
 
           {/* Image Upload */}
@@ -282,6 +329,12 @@ const ProductModal = ({
               </div>
             )}
           </div>
+
+          {error && (
+            <p className="text-red-dark">
+              {error}
+            </p>
+          )}
 
           {/* Actions */}
           <div className="flex justify-end gap-3 pt-4">

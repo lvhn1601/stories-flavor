@@ -137,4 +137,4 @@ const provinceDatas = [
   },
 ];
 
-export const getProvinceName = (pid: string) => provinceDatas.find((p) => pid === p.id).name;
+export const getProvinceName = (pid: string) => provinceDatas.find((p) => pid === p.id)?.name;

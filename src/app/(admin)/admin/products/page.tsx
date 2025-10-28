@@ -7,11 +7,17 @@ import { useAPI } from "@/hooks/useAPI";
 import { Product } from "@/types/product";
 import ProductTable from "@/components/Admin/Product/ProductTable";
 
+const TABS = [
+  { id: "OPTIONAL", label: "Tuỳ Hương" },
+  { id: "SUGGEST", label: "Tinh Tuyển" },
+  { id: "HIGHEND", label: "Thượng vị" },
+];
+
 const ProductManagementPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
-
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [activeTab, setActiveTab] = useState("OPTIONAL");
 
   const { API } = useAPI();
 
@@ -24,13 +30,13 @@ const ProductManagementPage = () => {
     if (res.success) {
       setProducts(res.data);
     }
-  }
+  };
 
   const editProduct = (product: Product) => {
     setSelectedProduct(product);
     setModalOpen(true);
-  }
-  
+  };
+
   const handleAddProduct = async (product: Product) => {
     const res = await API.post("/admin/products", product, true, true);
     if (res.success) {
@@ -40,18 +46,20 @@ const ProductManagementPage = () => {
 
   const handleSaveProduct = async (product: Product) => {
     const res = await API.put("/admin/products", product, true, true);
-
     if (res.success) {
       await loadProducts();
     }
-  }
+  };
+
+  const filteredProducts = products.filter((p) => p.category === activeTab);
 
   return (
     <div className="max-w-[1170px] w-full flex flex-col gap-10 mx-auto px-4 sm:px-8 xl:px-0 mt-36">
       {/* ===== Header ===== */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Quản lý sản phẩm</h1>
-        <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary-hover transition"
+        <button
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary-hover transition"
           onClick={() => setModalOpen(true)}
         >
           <Plus className="w-4 h-4" />
@@ -59,9 +67,36 @@ const ProductManagementPage = () => {
         </button>
       </div>
 
-      <ProductTable products={products} onEdit={editProduct} />
+      {/* ===== Tabs ===== */}
+      <div className="flex gap-3 border-b">
+        {TABS.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-4 py-2 font-medium border-b-2 transition ${
+              activeTab === tab.id
+                ? "border-primary text-primary"
+                : "border-transparent text-gray-500 hover:text-primary"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-      <ProductModal isOpen={modalOpen} product={selectedProduct} onClose={() => {setModalOpen(false); setSelectedProduct(null);}} onAdd={handleAddProduct} onSave={handleSaveProduct} />
+      {/* ===== Product Table ===== */}
+      <ProductTable products={filteredProducts} onEdit={editProduct} />
+
+      <ProductModal
+        isOpen={modalOpen}
+        product={selectedProduct}
+        onClose={() => {
+          setModalOpen(false);
+          setSelectedProduct(null);
+        }}
+        onAdd={handleAddProduct}
+        onSave={handleSaveProduct}
+      />
     </div>
   );
 };
