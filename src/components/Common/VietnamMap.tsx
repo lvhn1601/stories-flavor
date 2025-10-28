@@ -32,7 +32,7 @@ const VietnamMap: React.FC<VietnamMapProps> = ({ onProvinceClick, value }) => {
         viewBox="0 0 800 800"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="cursor-pointer transition-transform border"
+        className="cursor-pointer transition-transform border bg-white"
       >
         <g clipPath="url(#clip0_15_2)">
           <path d="M82.5 713.3L81.1 716.2L79.4 717.4L80 719L78.5 718.7L77.5 717.2L79 715.1L82.5 713.3Z" fill="#FFCDCD" stroke="#646464" strokeWidth="0.5" />

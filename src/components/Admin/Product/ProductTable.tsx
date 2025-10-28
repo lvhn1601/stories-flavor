@@ -62,7 +62,7 @@ const ProductTable = ({ products, onEdit }: ProductTableProps) => {
       {
         header: "Giá",
         accessorKey: "price",
-        cell: (info) => `${info.getValue()} đ`,
+        cell: (info) => `${info.getValue().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} VNĐ`,
       },
       {
         header: "Tỉnh Thành",

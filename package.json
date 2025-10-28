@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^2.6.1",
     "@supabase/supabase-js": "^2.76.1",
     "@svgr/webpack": "^8.1.0",
+    "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-table": "^8.21.3",
     "autoprefixer": "10.4.15",
     "bcryptjs": "^3.0.2",

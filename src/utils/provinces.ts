@@ -1,4 +1,20 @@
-const provinceDatas = [
+export const provinceDatas = [
+  {
+    id: "hanoi",
+    name: "Hà Nội"
+  },
+  {
+    id: "hochiminh",
+    name: "Hồ Chí Minh"
+  },
+  {
+    id: "danang",
+    name: "Đà Nẵng"
+  },
+  {
+    id: "hue",
+    name: "Huế"
+  },
   {
     id: "laocai",
     name: "Lào Cai"
@@ -16,16 +32,8 @@ const provinceDatas = [
     name: "Tuyên Quang"
   },
   {
-    id: "hochiminh",
-    name: "Hồ Chí Minh"
-  },
-  {
     id: "dongthap",
     name: "Đồng Tháp"
-  },
-  {
-    id: "hue",
-    name: "Huế"
   },
   {
     id: "thanhhoa",
@@ -62,10 +70,6 @@ const provinceDatas = [
   {
     id: "quangngai",
     name: "Quảng Ngãi"
-  },
-  {
-    id: "danang",
-    name: "Đà Nẵng"
   },
   {
     id: "daklak",
@@ -108,10 +112,6 @@ const provinceDatas = [
     name: "Hà Tĩnh"
   },
   {
-    id: "hanoi",
-    name: "Hà Nội"
-  },
-  {
     id: "gialai",
     name: "Gia Lai"
   },
@@ -137,4 +137,20 @@ const provinceDatas = [
   },
 ];
 
+export const domainDatas = [
+  {
+    id: "bac",
+    name: "Miền Bắc"
+  },
+  {
+    id: "trung",
+    name: "Miền Trung"
+  },
+  {
+    id: "nam",
+    name: "Miền Nam"
+  },
+]
+
 export const getProvinceName = (pid: string) => provinceDatas.find((p) => pid === p.id)?.name;
+export const getDomainName = (did: string) => domainDatas.find((d) => did === d.id)?.name;

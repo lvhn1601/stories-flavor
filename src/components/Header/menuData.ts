@@ -17,31 +17,25 @@ export const menuData: Menu[] = [
     id: 3,
     title: "Sản phẩm",
     newTab: false,
-    path: "/shop-without-sidebar",
-  },
-  {
-    id: 7,
-    title: "blogs",
-    newTab: false,
     path: "/",
     submenu: [
       {
         id: 71,
         title: "Tuỳ hương (hộp tự chọn)",
         newTab: false,
-        path: "/blogs/blog-grid-with-sidebar",
+        path: "/shop/tuy-huong",
       },
       {
         id: 72,
         title: "Tinh tuyển (hộp gợi ý)",
         newTab: false,
-        path: "/blogs/blog-grid",
+        path: "/shop/tinh-tuyen",
       },
       {
         id: 73,
         title: "Thượng vị (hộp cao cấp)",
         newTab: false,
-        path: "/blogs/blog-details-with-sidebar",
+        path: "/shop/thuong-vi",
       },
       // {
       //   id: 74,
@@ -50,6 +44,12 @@ export const menuData: Menu[] = [
       //   path: "/blogs/blog-details",
       // },
     ],
+  },
+  {
+    id: 7,
+    title: "blogs",
+    newTab: false,
+    path: "/blogs/blog-grid-with-sidebar",
   },
 ];
 

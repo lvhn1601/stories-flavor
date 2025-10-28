@@ -1,13 +1,22 @@
 import { prisma } from "@/utils/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const products = await prisma.product.findMany();
-    return NextResponse.json(
-      { data: products },
-      { status: 200 }
-    );
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get('category') as 'OPTIONAL' | 'SUGGEST' | 'HIGHEND' | null;
+
+    const where = category ? { category: category } : {};
+
+    const products = await prisma.product.findMany({
+      where,
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return NextResponse.json({
+      data: products
+    }, { status: 200 });
+
   } catch (error) {
     console.error("Error fetching products:", error);
     return NextResponse.json(
