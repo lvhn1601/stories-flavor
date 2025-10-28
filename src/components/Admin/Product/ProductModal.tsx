@@ -1,5 +1,6 @@
 "use client";
 
+import VietnamMap from "@/components/Common/VietnamMap";
 import { Product } from "@/types/product";
 import { uploadImages } from "@/utils/uploadImage";
 import dynamic from "next/dynamic";
@@ -29,13 +30,30 @@ const ProductModal = ({
     category: "OPTIONAL",
     description: "",
     price: 0,
+    province: "",
     images: [],
   });
 
   const [imageFiles, setImageFiles] = useState([] as File[]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
+  const clearForm = () => {
+    setFormData({
+      name: "",
+      description: "",
+      category: "OPTIONAL",
+      price: 0,
+      province: "",
+      images: [],
+    });
+
+    setPreviewImages([]);
+    setImageFiles([]);
+  }
+
   useEffect(() => {
+    if (!isOpen) return;
+
     if (product) {
       setFormData({
         id: product.id,
@@ -43,21 +61,14 @@ const ProductModal = ({
         description: product.description || "",
         category: product.category,
         price: product.price,
+        province: product.province || "",
         images: product.images || [],
       });
       setPreviewImages(product.images || []);
     } else {
-      setFormData({
-        name: "",
-        description: "",
-        category: "OPTIONAL",
-        price: 0,
-        images: [],
-      });
-      setPreviewImages([]);
+      clearForm();
     }
-  }, [product, isOpen]); // 👈 thêm `isOpen` để reset khi mở modal
-
+  }, [product, isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -117,8 +128,7 @@ const ProductModal = ({
   };
 
   const handleClose = () => {
-    if (product)
-      setImageFiles([]);
+    // clearForm();
     onClose();
   }
 
@@ -192,7 +202,7 @@ const ProductModal = ({
               Mô tả sản phẩm
             </label>
             <ReactQuill
-              key={product?.id || "new"} // 👈 ép ReactQuill unmount + remount khi đổi sản phẩm
+              key={product?.id || "new"}
               theme="snow"
               value={formData.description || ""}
               onChange={(value) =>
@@ -220,6 +230,14 @@ const ProductModal = ({
             />
           </div>
 
+          {/* Product Name */}
+          <div>
+            <label className="block text-sm font-medium text-gray-7 mb-1">
+              Tỉnh thành
+            </label>
+            <VietnamMap value={formData.province} onProvinceClick={(pid) => setFormData({ ...formData, province: pid })} />
+          </div>
+
           {/* Image Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-7 mb-2">
@@ -245,17 +263,17 @@ const ProductModal = ({
                 {previewImages.map((img, index) => (
                   <div
                     key={index}
-                    className="relative group border rounded-lg overflow-hidden"
+                    className="relative group border rounded-lg overflow-hidden h-60"
                   >
                     <img
                       src={img}
                       alt={`Product ${index}`}
-                      className="w-full h-24 object-cover"
+                      className="w-full h-full object-cover"
                     />
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(index)}
-                      className="absolute top-1 right-1 bg-dark/50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+                      className="absolute top-1 right-1 bg-dark/50 text-white rounded-full px-2 py-1 opacity-0 group-hover:opacity-100 transition"
                     >
                       ✕
                     </button>

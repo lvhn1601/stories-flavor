@@ -1,4 +1,5 @@
 import { Product } from "@/types/product";
+import { getProvinceName } from "@/utils/provinces";
 import {
   ColumnDef,
   flexRender,
@@ -61,21 +62,18 @@ const ProductTable = ({ products, onEdit }: ProductTableProps) => {
       {
         header: "Giá",
         accessorKey: "price",
-        cell: (info) => `$${info.getValue()}`,
+        cell: (info) => `${info.getValue()} đ`,
       },
       {
-        header: "Trạng thái",
-        accessorKey: "status",
+        header: "Tỉnh Thành",
+        accessorKey: "province",
         cell: (info) => {
-          const value = info.getValue() as boolean;
+          const value = info.getValue() as string;
           return (
             <span
-              className={`px-2 py-1 rounded-full text-xs font-medium ${value
-                  ? "bg-green-light-3 text-green-dark"
-                  : "bg-red-light-3 text-red-dark"
-                }`}
+              className={`px-2 py-1 rounded-full text-xs font-medium`}
             >
-              {value ? "Sẵn sàng" : "Hết hàng"}
+              {getProvinceName(value)}
             </span>
           );
         },

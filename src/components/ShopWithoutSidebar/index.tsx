@@ -11,6 +11,7 @@ import VietnamMap from "../Common/VietnamMap";
 
 const ShopWithoutSidebar = () => {
   const [productStyle, setProductStyle] = useState("grid");
+  const [selected , setSelected] = useState<string | null>(null);
 
   const options = [
     { label: "Latest Products", value: "0" },
@@ -30,7 +31,7 @@ const ShopWithoutSidebar = () => {
       </div>
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
         <div className="w-full">
-          <VietnamMap onProvinceClick={(pid) => console.log(pid)} />
+          <VietnamMap value={selected} onProvinceClick={(pid) => setSelected(pid)} />
         </div>
         <div className="flex gap-7.5">
           {/* // <!-- Content Start --> */}
