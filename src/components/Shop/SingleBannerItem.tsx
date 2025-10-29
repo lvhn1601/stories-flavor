@@ -7,7 +7,7 @@ import Image from "next/image";
 const SingleBannerItem = ({ item, alignLeft }: { item: Product, alignLeft: boolean }) => {
   return (
     <Link
-      href="/shop-details"
+      href={`/product/${item.id}`}
       className="flex items-center justify-between z-1 overflow-hidden rounded-lg px-14 bg-white py-12.5 group"
     >
       {alignLeft && (
