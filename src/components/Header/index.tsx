@@ -71,7 +71,7 @@ const Header = () => {
                   <UserDropdown user={session.user} menuItem={menuItem} />
                 ) : (
                   <div className="flex items-center gap-5">
-                    <Link href="/signin" className="flex items-center gap-2.5">
+                    <Link href="/signup" className="flex items-center gap-2.5">
                       <p className="font-medium text-custom-xs text-white">
                         Đăng ký
                       </p>

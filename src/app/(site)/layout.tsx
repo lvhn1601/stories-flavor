@@ -25,7 +25,9 @@ export default function RootLayout({
             <ModalProvider>
               <PreviewSliderProvider>
                 <Header />
-                {children}
+                <main className="mt-[120px]">
+                  {children}
+                </main>
 
                 {/* <QuickViewModal /> */}
                 <CartSidebarModal />

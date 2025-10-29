@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const PromoBanner = () => {
   return (
-    <section className="overflow-hidden">
+    <section className="overflow-hidden pt-10">
       <div className="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
         <div className="bg-primary relative z-1 overflow-hidden rounded-xl">
           {/* <!-- bg shapes --> */}

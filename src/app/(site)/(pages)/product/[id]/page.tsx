@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import RecentlyViewdItems from "@/components/ShopDetails/RecentlyViewd";
 import Image from "next/image";
 import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { useAPI } from "@/hooks/useAPI";

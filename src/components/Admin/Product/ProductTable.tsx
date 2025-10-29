@@ -46,20 +46,6 @@ const ProductTable = ({ products, onEdit }: ProductTableProps) => {
       },
       { header: "Tên sản phẩm", accessorKey: "name" },
       {
-        header: "Danh mục",
-        accessorKey: "category",
-        cell: (info) => {
-          const category = info.getValue() as Product["category"];
-          const label =
-            category === "OPTIONAL"
-              ? "Tùy chọn"
-              : category === "SUGGEST"
-                ? "Gợi ý"
-                : "Cao cấp";
-          return <span className="capitalize">{label}</span>;
-        },
-      },
-      {
         header: "Giá",
         accessorKey: "price",
         cell: (info) => `${info.getValue().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} VNĐ`,
