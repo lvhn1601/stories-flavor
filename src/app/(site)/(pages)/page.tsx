@@ -13,7 +13,6 @@ export default function HomePage() {
       <Hero />
       <Stages />
       <Collection />
-      {/* <BestSeller /> */}
       <Testimonials />
       <Stories />
       <PromoBanner />

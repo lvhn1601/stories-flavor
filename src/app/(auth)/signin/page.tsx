@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-const SigninPage = () => {
+const SigninPageContent = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -162,5 +162,11 @@ const SigninPage = () => {
     </section>
   );
 };
+
+const SigninPage = () => {
+  <Suspense fallback={<div>Loading...</div>}>
+    <SigninPageContent />
+  </Suspense>
+}
 
 export default SigninPage;

@@ -4,8 +4,6 @@ import Image from "next/image";
 import { Product } from "@/types/product";
 import { useModalContext } from "@/app/context/QuickViewModalContext";
 import { updateQuickView } from "@/redux/features/quickView-slice";
-import { addItemToCart } from "@/redux/features/cart-slice";
-import { addItemToWishlist } from "@/redux/features/wishlist-slice";
 import { updateproductDetails } from "@/redux/features/product-details";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
