@@ -19,6 +19,7 @@ model User {
   created_at  DateTime @default(now())
 
   reviews     Review[]
+  blogs       Blog[]
 }
 
 model Product {
@@ -52,4 +53,15 @@ model Review {
 
   user       User      @relation(fields: [userId], references: [id])
   product    Product   @relation(fields: [productId], references: [id])
+}
+
+model Blog {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  image     String
+  createdAt DateTime @default(now())
+  authorId  Int
+
+  author    User     @relation(fields: [authorId], references: [id])
 }

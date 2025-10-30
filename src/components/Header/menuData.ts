@@ -76,6 +76,6 @@ export const adminMenuData: Menu[] = [
     id: 4,
     title: "Quản lý bài viết",
     newTab: false,
-    path: "/contact",
+    path: "/admin/blogs",
   },
 ];

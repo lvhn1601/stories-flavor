@@ -159,7 +159,7 @@ const ShopDetailsPage = () => {
                 onClick={() => setDescriptionOpen(!descriptionOpen)}
               >
                 <h3 className="text-xl font-semibold mb-2">
-                  {descriptionOpen ? "▾" : "▴"} Mô tả
+                  {descriptionOpen ? "▴" : "▾"} Mô tả
                 </h3>
                 <div
                   className={`prose max-w-none text-dark/80 cursor-pointer ${!descriptionOpen && "line-clamp-3"}`}
