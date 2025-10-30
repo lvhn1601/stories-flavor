@@ -147,7 +147,7 @@ const ShopDetailsPage = () => {
       </section>
 
       {/* === REVIEWS SECTION === */}
-      <section className="bg-gray-1 py-16 px-4 sm:px-8">
+      <section className="py-16 px-4 sm:px-8">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-semibold text-dark mb-6">Đánh giá</h2>
 
@@ -172,7 +172,7 @@ const ShopDetailsPage = () => {
           {/* Example review items */}
           <div className="space-y-5">
             {[1, 2, 3].map((r) => (
-              <div key={r} className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
+              <div key={r} className="rounded-xl bg-white shadow-lg p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <a href="#" className="flex items-center gap-4">
                     <div className="w-12.5 h-12.5 rounded-full overflow-hidden">

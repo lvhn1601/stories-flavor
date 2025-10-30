@@ -3,8 +3,8 @@ import Image from "next/image";
 
 const Missions = () => {
   return (
-    <div className="flex items-center justify-between z-1 overflow-hidden rounded-lg py-12.5">
-      <div className="max-w-[50%] min-h-[280px] w-full">
+    <div className="flex items-center justify-between z-1 overflow-hidden rounded-2xl">
+      <div className="max-w-[50%] w-full">
         <h2 className="font-bold text-xl lg:text-heading-4 xl:text-heading-3 text-dark mb-5">
           Sứ mệnh và tầm nhìn của chúng tôi
         </h2>
@@ -19,6 +19,7 @@ const Missions = () => {
         alt="promo img"
         width={274}
         height={350}
+        className="shadow-xl"
       />
     </div>
   );

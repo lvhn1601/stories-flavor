@@ -25,7 +25,7 @@ export default function RootLayout({
             <ModalProvider>
               <PreviewSliderProvider>
                 <Header />
-                <main className="mt-[120px]">
+                <main className="mt-[120px] pb-20">
                   {children}
                 </main>
 

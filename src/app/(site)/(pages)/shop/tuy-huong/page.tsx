@@ -37,7 +37,7 @@ const ShopWithoutSidebarPage = () => {
   }
 
   return (
-    <section className="overflow-hidden relative pb-20 bg-[#f3f4f6]">
+    <section className="overflow-hidden relative pb-20">
       <div className="w-full flex flex-col gap-4 justify-center items-center py-10">
         <h1 className="font-bold text-2xl xl:text-heading-4 text-dark text-center">
           Sản phẩm

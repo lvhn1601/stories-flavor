@@ -39,7 +39,7 @@ const CoreValue = () => {
       <div className="flex flex-col gap-6">
         {/* <!-- New Arrivals item --> */}
         {values.map((item, index) => (
-          <div key={`${item.id}`} className="flex justify-start items-center w-full bg-gray-4">
+          <div key={`${item.id}`} className="flex justify-start items-center w-full bg-primary-light">
             {index % 2 === 0 ? (
               <>
                 <Image
