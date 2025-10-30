@@ -6,17 +6,23 @@ import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { useAPI } from "@/hooks/useAPI";
 import { Product } from "@prisma/client";
 import { useParams } from "next/navigation";
+import { Review } from "@/types/review";
 
 const ShopDetailsPage = () => {
   const { openPreviewModal } = usePreviewSlider();
   const [previewImg, setPreviewImg] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState<Product | null>(null);
+  const [comment, setComment] = useState<string>("");
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [descriptionOpen, setDescriptionOpen] = useState(false);
+
   const { id } = useParams();
   const { API } = useAPI();
 
   useEffect(() => {
     loadProduct();
+    loadReview();
   }, []);
 
   const loadProduct = async () => {
@@ -24,7 +30,21 @@ const ShopDetailsPage = () => {
     if (res.success) setProduct(res.data);
   };
 
-  console.log(product)
+  const loadReview = async () => {
+    const res = await API.get(`/product-review?pid=${id}`, false, true);
+    if (res.success) setReviews(res.data);
+  }
+
+  const handleReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const res = await API.post("/product-review", {
+      productId: id,
+      comment: comment
+    }, true, true);
+
+    if (res.success) loadReview();
+  }
 
   if (!product) return <div className="text-center py-20">Đang tải...</div>;
 
@@ -134,10 +154,15 @@ const ShopDetailsPage = () => {
               </div>
 
               {/* Description */}
-              <div>
-                <h3 className="text-xl font-semibold mb-2">Mô tả</h3>
+              <div
+                className="cursor-pointer"
+                onClick={() => setDescriptionOpen(!descriptionOpen)}
+              >
+                <h3 className="text-xl font-semibold mb-2">
+                  {descriptionOpen ? "▾" : "▴"} Mô tả
+                </h3>
                 <div
-                  className="prose max-w-none text-dark/80"
+                  className={`prose max-w-none text-dark/80 cursor-pointer ${!descriptionOpen && "line-clamp-3"}`}
                   dangerouslySetInnerHTML={{ __html: product.description || "" }}
                 />
               </div>
@@ -151,19 +176,22 @@ const ShopDetailsPage = () => {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-semibold text-dark mb-6">Đánh giá</h2>
 
-          <form className="mb-8">
+          <form className="mb-8" onSubmit={handleReviewSubmit}>
             <textarea
               rows={5}
               placeholder="Viết đánh giá của bạn..."
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
               className="w-full border border-gray-3 rounded-md p-4 outline-none focus:border-primary focus:shadow-input"
             ></textarea>
             <div className="flex justify-between text-sm text-gray-500 mt-1">
               <span>Tối đa 250 ký tự</span>
-              <span>0/250</span>
+              <span className={`${comment.length > 250 && "text-red"}`}>{comment.length}/250</span>
             </div>
             <button
               type="submit"
               className="bg-primary text-white px-6 py-3 rounded-md mt-3 hover:bg-primary-dark transition"
+              disabled={comment.length > 250}
             >
               Thêm đánh giá
             </button>
@@ -171,13 +199,15 @@ const ShopDetailsPage = () => {
 
           {/* Example review items */}
           <div className="space-y-5">
-            {[1, 2, 3].map((r) => (
-              <div key={r} className="rounded-xl bg-white shadow-lg p-4 sm:p-6">
+            {reviews.length === 0 ? (
+              <p>Chưa có đánh giá nào</p>
+            ) : (reviews.map((r) => (
+              <div key={r.id.toString()} className="rounded-xl bg-white shadow-lg p-4 sm:p-6">
                 <div className="flex items-center justify-between">
-                  <a href="#" className="flex items-center gap-4">
+                  <div className="flex items-center gap-4">
                     <div className="w-12.5 h-12.5 rounded-full overflow-hidden">
                       <Image
-                        src="/images/users/user-01.jpg"
+                        src={r.user.image}
                         alt="author"
                         className="w-12.5 h-12.5 rounded-full overflow-hidden"
                         width={50}
@@ -187,22 +217,20 @@ const ShopDetailsPage = () => {
 
                     <div>
                       <h3 className="font-medium text-dark">
-                        Davis Dorwart
+                        {r.user.name}
                       </h3>
                       <p className="text-custom-sm">
-                        Serial Entrepreneur
+                        Khách hàng
                       </p>
                     </div>
-                  </a>
+                  </div>
                 </div>
 
                 <p className="text-dark mt-6">
-                  “Lorem ipsum dolor sit amet, adipiscing elit. Donec
-                  malesuada justo vitaeaugue suscipit beautiful
-                  vehicula’’
+                  "{r.comment}"
                 </p>
               </div>
-            ))}
+            )))}
           </div>
         </div>
       </section>
