@@ -164,9 +164,11 @@ const SigninPageContent = () => {
 };
 
 const SigninPage = () => {
-  <Suspense fallback={<div>Loading...</div>}>
-    <SigninPageContent />
-  </Suspense>
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SigninPageContent />
+    </Suspense>
+  );
 }
 
 export default SigninPage;

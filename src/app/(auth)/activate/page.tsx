@@ -12,9 +12,9 @@ const ActivatePage = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    name: session?.user?.name || "",
-    email: session?.user?.email || "",
-    phone: session?.user?.phone || "",
+    name: "",
+    email: "",
+    phone: "",
     password: "",
     reTypePassword: "",
   });
@@ -24,25 +24,31 @@ const ActivatePage = () => {
   const { API } = useAPI();
 
   useEffect(() => {
-    if (status === "loading") {
-      showLoading();
-    } else {
-      hideLoading();
+    showLoading();
+    if (status === "loading") return;
+
+    if (status === "unauthenticated") {
+      router.push("/signin");
+      return;
     }
-  }, [status]);
 
-  useEffect(() => {
-    checkProfile()
-    const err = new URLSearchParams(window.location.search).get('error')
-    setError(err || null)
-  }, [session?.user]);
+    if (session?.user?.isActivated) {
+      router.push("/");
+      return;
+    }
 
-  const checkProfile = async () => {
-    showLoading()
-    if (!session?.user || session?.user?.isActivated)
-      router.push('/');
-    hideLoading()
-  };
+    setFormData({
+      name: session?.user?.name || "",
+      email: session?.user?.email || "",
+      phone: session?.user?.phone || "",
+      password: "",
+      reTypePassword: "",
+    });
+
+    const err = new URLSearchParams(window.location.search).get("error");
+    setError(err || null);
+    hideLoading();
+  }, [status, session]);
 
   useEffect(() => {
     if (!formData.name && !formData.phone && !formData.password && !formData.reTypePassword) {
