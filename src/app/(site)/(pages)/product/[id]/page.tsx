@@ -227,7 +227,7 @@ const ShopDetailsPage = () => {
                 </div>
 
                 <p className="text-dark mt-6">
-                  "{r.comment}"
+                  {r.comment}
                 </p>
               </div>
             )))}
