@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import ProductItem from "@/components/Common/ProductItem";
 import blogData from "@/components/BlogGrid/blogData";
-import BlogItem from "@/components/Blog/BlogItem";
+import BlogItem from "@/components/Blog/BlogGridItem";
+import BlogGridItem from "@/components/Blog/BlogGridItem";
 
 const Stories = () => {
   return (
@@ -26,7 +27,7 @@ const Stories = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7.5 gap-y-9">
           {/* <!-- New Arrivals item --> */}
           {blogData.slice(0, 4).map((blog, key) => (
-            <BlogItem blog={blog} key={key} />
+            <BlogGridItem blog={blog} key={key} />
           ))}
         </div>
       </div>

@@ -8,7 +8,7 @@ const SingleBannerItem = ({ item, alignLeft }: { item: Product, alignLeft: boole
   return (
     <Link
       href={`/product/${item.id}`}
-      className="flex items-center justify-between z-1 overflow-hidden rounded-lg px-14 bg-white py-12.5 group"
+      className="flex items-center justify-between z-1 overflow-hidden rounded-lg shadow-lg px-14 bg-white py-12.5 group"
     >
       {alignLeft && (
         <Image

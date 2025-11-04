@@ -49,7 +49,7 @@ export const menuData: Menu[] = [
     id: 7,
     title: "Blogs",
     newTab: false,
-    path: "/blogs/blog-grid-with-sidebar",
+    path: "/blogs",
   },
 ];
 
