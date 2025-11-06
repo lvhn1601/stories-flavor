@@ -66,7 +66,7 @@ const Header = () => {
               {/* <!-- divider --> */}
               <span className="hidden xl:block w-px h-7.5 bg-gray-4"></span>
 
-              <div className="flex w-full lg:w-auto justify-between items-center gap-5">
+              <div className="hidden xl:flex w-full lg:w-auto justify-between items-center gap-5">
                 {session?.user ? (
                   <UserDropdown user={session.user} menuItem={menuItem} />
                 ) : (
@@ -83,43 +83,6 @@ const Header = () => {
                     </Link>
                   </div>
                 )}
-
-                {/* <!-- Hamburger Toggle BTN --> */}
-                <button
-                  id="Toggle"
-                  aria-label="Toggler"
-                  className="xl:hidden block"
-                  onClick={() => setNavigationOpen(!navigationOpen)}
-                >
-                  <span className="block relative cursor-pointer w-5.5 h-5.5">
-                    <span className="du-block absolute right-0 w-full h-full">
-                      <span
-                        className={`block relative top-0 left-0 bg-dark rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-[0] ${!navigationOpen && "!w-full delay-300"
-                          }`}
-                      ></span>
-                      <span
-                        className={`block relative top-0 left-0 bg-dark rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-150 ${!navigationOpen && "!w-full delay-400"
-                          }`}
-                      ></span>
-                      <span
-                        className={`block relative top-0 left-0 bg-dark rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-200 ${!navigationOpen && "!w-full delay-500"
-                          }`}
-                      ></span>
-                    </span>
-
-                    <span className="block absolute right-0 w-full h-full rotate-45">
-                      <span
-                        className={`block bg-dark rounded-sm ease-in-out duration-200 delay-300 absolute left-2.5 top-0 w-0.5 h-full ${!navigationOpen && "!h-0 delay-[0] "
-                          }`}
-                      ></span>
-                      <span
-                        className={`block bg-dark rounded-sm ease-in-out duration-200 delay-400 absolute left-0 top-2.5 w-full h-0.5 ${!navigationOpen && "!h-0 dealy-200"
-                          }`}
-                      ></span>
-                    </span>
-                  </span>
-                </button>
-                {/* //   <!-- Hamburger Toggle BTN --> */}
               </div>
             </div>
           </div>
@@ -139,12 +102,31 @@ const Header = () => {
               {/* <!--=== Main Nav Start ===--> */}
               <div
                 className={`w-[288px] absolute right-4 top-full xl:static xl:w-auto h-0 xl:h-auto invisible xl:visible xl:flex items-center justify-between ${navigationOpen &&
-                  `!visible bg-white shadow-lg border border-gray-3 !h-auto max-h-[400px] overflow-y-scroll rounded-md p-5`
+                  `!visible bg-primary shadow-lg border border-gray-3 !h-auto max-h-[400px] overflow-y-scroll rounded-md p-5`
                   }`}
               >
                 {/* <!-- Main Nav Start --> */}
                 <nav>
-                  <ul className="flex xl:items-center flex-col xl:flex-row gap-5 xl:gap-6">
+                  <ul className="flex xl:items-center flex-col xl:flex-row gap-2 xl:gap-6">
+                    <li className="xl:hidden flex w-full justify-between items-center gap-5">
+                      {session?.user ? (
+                        <UserDropdown user={session.user} menuItem={menuItem} />
+                      ) : (
+                        <div className="flex items-center gap-5">
+                          <Link href="/signup" className="flex items-center gap-2.5">
+                            <p className="font-medium text-custom-xs text-white">
+                              Đăng ký
+                            </p>
+                          </Link>
+                          <Link href="/signin" className="flex items-center gap-2.5">
+                            <div className="font-medium border bg-primary-dark rounded-md px-2 py-1 text-custom-xs text-white">
+                              Đăng nhập
+                            </div>
+                          </Link>
+                        </div>
+                      )}
+                    </li>
+
                     {menuData.map((menuItem, i) =>
                       menuItem.submenu ? (
                         <Dropdown
@@ -159,7 +141,7 @@ const Header = () => {
                         >
                           <Link
                             href={menuItem.path}
-                            className={`hover:text-primary-hover text-custom-sm font-medium text-white flex xl:py-4`}
+                            className={`hover:text-primary-hover text-custom-sm font-medium text-white flex py-2 xl:py-4`}
                           >
                             {menuItem.title}
                           </Link>
@@ -249,6 +231,43 @@ const Header = () => {
                   </span>
                 </button>
               </div>
+
+              {/* <!-- Hamburger Toggle BTN --> */}
+              <button
+                id="Toggle"
+                aria-label="Toggler"
+                className="xl:hidden block"
+                onClick={() => setNavigationOpen(!navigationOpen)}
+              >
+                <span className="block relative cursor-pointer w-5.5 h-5.5">
+                  <span className="du-block absolute right-0 w-full h-full">
+                    <span
+                      className={`block relative top-0 left-0 bg-white rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-[0] ${!navigationOpen && "!w-full delay-300"
+                        }`}
+                    ></span>
+                    <span
+                      className={`block relative top-0 left-0 bg-white rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-150 ${!navigationOpen && "!w-full delay-400"
+                        }`}
+                    ></span>
+                    <span
+                      className={`block relative top-0 left-0 bg-white rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-200 ${!navigationOpen && "!w-full delay-500"
+                        }`}
+                    ></span>
+                  </span>
+
+                  <span className="block absolute right-0 w-full h-full rotate-45">
+                    <span
+                      className={`block bg-white rounded-sm ease-in-out duration-200 delay-300 absolute left-2.5 top-0 w-0.5 h-full ${!navigationOpen && "!h-0 delay-[0] "
+                        }`}
+                    ></span>
+                    <span
+                      className={`block bg-white rounded-sm ease-in-out duration-200 delay-400 absolute left-0 top-2.5 w-full h-0.5 ${!navigationOpen && "!h-0 dealy-200"
+                        }`}
+                    ></span>
+                  </span>
+                </span>
+              </button>
+              {/* //   <!-- Hamburger Toggle BTN --> */}
               {/* // <!--=== Main Nav End ===--> */}
             </div>
           </div>

@@ -9,7 +9,7 @@ const UserDropdown = ({ user, menuItem }) => {
     return (
         <div
             onClick={() => setDropdownToggler(!dropdownToggler)}
-            className={`group relative cursor-pointer before:w-0 before:h-[3px]`}
+            className={`group relative w-full cursor-pointer before:w-0 before:h-[3px]`}
         >
             <div className={ `flex items-center gap-3.5 text-custom-sm font-medium text-white`}>
                 <Image
@@ -24,7 +24,7 @@ const UserDropdown = ({ user, menuItem }) => {
 
             {/* <!-- Dropdown Start --> */}
             <ul
-                className={`dropdown ${dropdownToggler && "flex"} bg-primary-dark border-none shadow-1 xl:group-hover:translate-y-0 mt-4 z-9999`}
+                className={`dropdown ${dropdownToggler && "flex"} w-full bg-primary-dark border-none shadow-1 xl:group-hover:translate-y-0 mt-4 z-9999`}
             >
                 {menuItem.map((item, i) => (
                     <li key={i}>

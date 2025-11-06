@@ -15,7 +15,7 @@ const Dropdown = ({ menuItem, stickyMenu }) => {
     >
       <a
         href="#"
-        className={`hover:text-primary-hover text-custom-sm font-medium text-white flex items-center gap-1.5 capitalize xl:py-4 ${pathUrl.includes(menuItem.title) && "!text-white"}`}
+        className={`hover:text-primary-hover text-custom-sm font-medium text-white flex items-center gap-1.5 capitalize py-2 xl:py-4 ${pathUrl.includes(menuItem.title) && "!text-white"}`}
       >
         {menuItem.title}
         <svg
@@ -37,7 +37,7 @@ const Dropdown = ({ menuItem, stickyMenu }) => {
 
       {/* <!-- Dropdown Start --> */}
       <ul
-        className={`dropdown ${dropdownToggler && "flex"} bg-primary-dark border-none shadow-1 ${
+        className={`dropdown ${dropdownToggler && "flex"} bg-primary xl:bg-primary-dark border-none shadow-none xl:shadow-1 ${
           stickyMenu
             ? "xl:group-hover:translate-y-0"
             : "xl:group-hover:translate-y-0"
@@ -47,7 +47,7 @@ const Dropdown = ({ menuItem, stickyMenu }) => {
           <li key={i}>
             <Link
               href={item.path}
-              className={`flex text-custom-sm text-white hover:bg-primary py-[7px] px-4.5 ${
+              className={`flex text-custom-sm text-white py-[7px] px-4.5 group relative before:w-0 before:h-[3px] before:bg-primary-hover before:absolute before:left-0 before:top-0 before:rounded-b-[3px] before:ease-out before:duration-200 hover:before:w-full  ${
                 pathUrl === item.path && "bg-primary"
               } `}
             >
