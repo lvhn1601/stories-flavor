@@ -2,7 +2,7 @@ import { useState } from "react";
 import SingleItem from "./SingleItem";
 import { getProvinceName } from "@/utils/provinces";
 
-const CartGrouped = ({ cartItems, removeItemFromCart }) => {
+const CartGroup = ({ cartItems }) => {
   // nhóm theo province
   const groupedByProvince = cartItems.reduce((groups, item) => {
     const province = item.province || "Khác";
@@ -18,38 +18,31 @@ const CartGrouped = ({ cartItems, removeItemFromCart }) => {
     setOpen((prev) => ({ ...prev, [province]: !prev[province] }));
   };
 
-  return (
-    <div className="overflow-y-auto no-scrollbar">
-      <div className="flex flex-col gap-6">
-        {Object.keys(groupedByProvince).map((province) => (
-          <div key={province} className="py-3">
-
-            {/* HEADER TỈNH THÀNH */}
+  return Object.keys(groupedByProvince).map((province) => (
+    <div key={province}>
+      <div className="bg-white rounded-[10px] shadow-lg">
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-[1170px] flex flex-col">
             <div
-              className="flex justify-between items-center cursor-pointer"
+              className="flex justify-between items-center cursor-pointer px-5 py-5.5"
               onClick={() => toggle(province)}
             >
-              <span className="font-semibold text-lg">{!open[province] ? "▴" : "▾"} {getProvinceName(province)}</span>
+              <span className="font-semibold text-xl">{getProvinceName(province)}</span>
             </div>
 
             {/* DANH SÁCH ITEM */}
             {!open[province] && (
-              <div className="mt-3 flex flex-col gap-4">
+              <div className="flex flex-col gap-4">
                 {groupedByProvince[province].map((item, idx) => (
-                  <SingleItem
-                    key={idx}
-                    item={item}
-                    removeItemFromCart={removeItemFromCart}
-                  />
+                  <SingleItem item={item} key={idx} />
                 ))}
               </div>
             )}
-
           </div>
-        ))}
-      </div>
+        </div>
+      </div >
     </div>
-  );
+  ))
 };
 
-export default CartGrouped;
+export default CartGroup;
