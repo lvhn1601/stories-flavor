@@ -38,15 +38,14 @@ const EmptyCart = () => {
         </svg>
       </div>
 
-      <p className="pb-6">Your cart is empty!</p>
+      <p className="pb-6">Giỏ hàng trống!</p>
 
-      <Link
+      <div
         onClick={() => closeCartModal()}
-        href="/shop-with-sidebar"
-        className="w-full lg:w-10/12 mx-auto flex justify-center font-medium text-white bg-dark py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
+        className="w-full lg:w-10/12 cursor-pointer mx-auto flex justify-center font-medium text-white bg-primary py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
       >
-        Continue Shopping
-      </Link>
+        Tiếp tục mua sắm
+      </div>
     </div>
   );
 };
