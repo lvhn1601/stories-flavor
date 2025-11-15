@@ -115,7 +115,7 @@ const CartSidebarModal = () => {
             <div className="flex items-center gap-4">
               <Link
                 onClick={() => closeCartModal()}
-                href="/cart"
+                href="/account/cart"
                 className="w-full flex justify-center font-medium text-white bg-primary py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-primary-dark"
               >
                 Mua hàng

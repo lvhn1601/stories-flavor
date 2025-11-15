@@ -11,6 +11,7 @@ import ScrollToTop from "@/components/Common/ScrollToTop";
 import Footer from "@/components/Footer";
 import { SessionProvider } from "next-auth/react";
 import SessionCheck from "@/components/Common/SessionCheck";
+import ActivateCheck from "@/components/Common/ActivateCheck";
 
 export default function RootLayout({
   children,
@@ -19,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <SessionProvider>
-      <SessionCheck>
+      <ActivateCheck>
         <ReduxProvider>
           <CartModalProvider>
             <ModalProvider>
@@ -38,7 +39,7 @@ export default function RootLayout({
         </ReduxProvider>
         <ScrollToTop />
         <Footer />
-      </SessionCheck>
+      </ActivateCheck>
     </SessionProvider>
   );
 }

@@ -13,13 +13,13 @@ const UserDropdown = ({ user, menuItem }) => {
         >
             <div className={ `flex items-center gap-3.5 text-custom-sm font-medium text-white`}>
                 <Image
-                    src={user.image ?? "/images/users/user-01.jpg"}
-                    alt={user.name ?? "User avatar"}
+                    src={user?.image ?? "/images/users/user-01.jpg"}
+                    alt={user?.name ?? "User avatar"}
                     width={32}
                     height={32}
                     className="rounded-full"
                 />
-                {user.name}
+                {user?.name}
             </div>
 
             {/* <!-- Dropdown Start --> */}

@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function SessionCheck({
+export default function ActivateCheck({
   children,
 }: {
   children: React.ReactNode;
@@ -15,8 +15,8 @@ export default function SessionCheck({
   useEffect(() => {
     if (status === "loading") return;
 
-    if (!session?.user) {
-      router.replace("/signin");
+    if (session?.user && !session.user.isActivated) {
+      router.replace("/activate");
     }
   }, [session, status, router]);
 

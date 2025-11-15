@@ -17,50 +17,38 @@ const CartPage = () => {
       <h1 className="font-bold text-2xl xl:text-heading-4 text-dark text-center">
         Đơn hàng
       </h1>
-      <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+      <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 mt-10">
         <div className="w-full flex flex-col gap-10">
-          {suggestItems.length > 0 && (
-            <div className="flex flex-col">
-              <span className="w-full flex justify-center py-7.5">
-                <h3 className="font-medium text-white text-md sm:text-lg bg-primary rounded-xl px-3">Sản phẩm đề xuất</h3>
-              </span>
-              <div className="bg-white rounded-[10px] shadow-lg">
-                <div className="w-full overflow-x-auto">
-                  <div className="min-w-[1170px] flex flex-col">
-                    <div className="flex items-center py-5.5 px-7.5">
-                      <div className="min-w-[400px]">
-                        <p className="text-dark">Sản phẩm</p>
-                      </div>
-
-                      <div className="min-w-[180px]">
-                        <p className="text-dark">Giá</p>
-                      </div>
-
-                      <div className="min-w-[275px]">
-                        <p className="text-dark">Số lượng</p>
-                      </div>
-
-                      <div className="min-w-[250px]">
-                        <p className="text-dark">Đơn giá</p>
-                      </div>
+          <div className="flex flex-col">
+            <div className="bg-white rounded-[10px] shadow-lg">
+              <div className="w-full overflow-x-auto">
+                <div className="min-w-[1170px] flex flex-col">
+                  <div className="flex items-center py-5.5 px-7.5">
+                    <div className="min-w-[400px]">
+                      <p className="text-dark">Sản phẩm</p>
                     </div>
 
-                    {suggestItems.map((item, key) => (
-                      <SingleItem key={key} item={item} />
-                    ))}
+                    <div className="min-w-[180px]">
+                      <p className="text-dark">Giá</p>
+                    </div>
+
+                    <div className="min-w-[275px]">
+                      <p className="text-dark">Số lượng</p>
+                    </div>
+
+                    <div className="min-w-[250px]">
+                      <p className="text-dark">Đơn giá</p>
+                    </div>
                   </div>
+
+                  {suggestItems.map((item, key) => (
+                    <SingleItem key={key} item={item} />
+                  ))}
+                  <CartGroup cartItems={optionalItems} />
                 </div>
               </div>
             </div>
-          )}
-          {optionalItems.length > 0 && (
-            <div className="flex flex-col">
-              <span className="w-full flex justify-center py-7.5">
-                <h3 className="font-medium text-white text-md sm:text-lg bg-primary rounded-xl px-3">Sản phẩm đơn</h3>
-              </span>
-              <CartGroup cartItems={optionalItems} />
-            </div>
-          )}
+          </div>
         </div>
 
         <div className="flex lg:justify-end mt-20">

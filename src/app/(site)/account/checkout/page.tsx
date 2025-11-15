@@ -1,18 +1,37 @@
 "use client";
 import Billing from "@/components/Checkout/Billing";
-import Coupon from "@/components/Checkout/Coupon";
-import Login from "@/components/Checkout/Login";
-import PaymentMethod from "@/components/Checkout/PaymentMethod";
-import Shipping from "@/components/Checkout/Shipping";
-import ShippingMethod from "@/components/Checkout/ShippingMethod";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useAppSelector } from "@/redux/store";
-import React from "react";
+import { getOrderItemsList } from "@/utils/order";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const CheckoutPage = () => {
+  const { data: session } = useSession();
+
   const cartItems = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
+
+  const orderItems = getOrderItemsList(cartItems);
+
+  const [data, setData] = useState({
+    name: "",
+    province: "",
+    address: "",
+    phone: "",
+    note: "",
+  });
+
+  useEffect(() => {
+    if (session?.user) {
+      setData({
+        ...data,
+        name: session.user.name || "",
+        phone: session.user.phone || "",
+      });
+    }
+  }, [session]);
 
   return (
     <section className="overflow-hidden py-10">
@@ -26,7 +45,7 @@ const CheckoutPage = () => {
             <div className="lg:max-w-[670px] w-full">
 
               {/* <!-- billing details --> */}
-              <Billing />
+              <Billing data={data} setData={setData} />
 
               {/* <!-- others note box --> */}
               <div className="bg-white shadow-lg rounded-[10px] p-4 sm:p-8.5 mt-7.5">
@@ -40,6 +59,8 @@ const CheckoutPage = () => {
                     id="notes"
                     rows={5}
                     placeholder="Notes about your order, e.g. speacial notes for delivery."
+                    value={data.note}
+                    onChange={(e) => setData({ ...data, note: e.target.value })}
                     className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full p-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
                   ></textarea>
                 </div>
@@ -58,13 +79,13 @@ const CheckoutPage = () => {
 
                 <div className="pt-2.5 pb-8.5 px-4 sm:px-8.5">
                   {/* <!-- product items --> */}
-                  {cartItems.map((item, key) => (
+                  {orderItems.map((item, key) => (
                     <div key={key} className="flex items-center justify-between gap-2 py-5 border-b border-gray-3">
                       <div>
                         <p className="text-dark line-clamp-1">{item.name}</p>
                       </div>
                       <div>
-                        <p className="text-dark text-right">{(item.price * item.quantity).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</p>
+                        <p className="text-dark text-right">{item.totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</p>
                       </div>
                     </div>
                   ))}
@@ -91,9 +112,6 @@ const CheckoutPage = () => {
                   </div>
                 </div>
               </div>
-
-              {/* <!-- payment box --> */}
-              <PaymentMethod />
 
               {/* <!-- checkout button --> */}
               <button

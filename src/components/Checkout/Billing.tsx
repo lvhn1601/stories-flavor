@@ -1,7 +1,7 @@
 import { provinceDatas } from "@/utils/provinces";
 import React from "react";
 
-const Billing = () => {
+const Billing = ({ data, setData }) => {
   return (
     <div>
       <div className="bg-white shadow-lg rounded-[10px] p-4 sm:p-8.5">
@@ -17,6 +17,8 @@ const Billing = () => {
             type="text"
             name="name"
             id="name"
+            value={data.name}
+            onChange={(e) => setData({ ...data, name: e.target.value })}
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
           />
         </div>
@@ -28,7 +30,12 @@ const Billing = () => {
           </label>
 
           <div className="relative">
-            <select className="w-full bg-gray-1 rounded-md border border-gray-3 text-dark-4 py-3 pl-5 pr-9 duration-200 appearance-none outline-none focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20" name="province">
+            <select 
+              className="w-full bg-gray-1 rounded-md border border-gray-3 text-dark-4 py-3 pl-5 pr-9 duration-200 appearance-none outline-none focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
+              name="province"
+              value={data.province}
+              onChange={(e) => setData({ ...data, province: e.target.value })}
+            >
               {provinceDatas.map((province) => (
                 <option key={province.id} value={province.id}>
                   {province.name}
@@ -49,7 +56,7 @@ const Billing = () => {
                   d="M2.41469 5.03569L2.41467 5.03571L2.41749 5.03846L7.76749 10.2635L8.0015 10.492L8.23442 10.2623L13.5844 4.98735L13.5844 4.98735L13.5861 4.98569C13.6809 4.89086 13.8199 4.89087 13.9147 4.98569C14.0092 5.08024 14.0095 5.21864 13.9155 5.31345C13.9152 5.31373 13.915 5.31401 13.9147 5.31429L8.16676 10.9622L8.16676 10.9622L8.16469 10.9643C8.06838 11.0606 8.02352 11.0667 8.00039 11.0667C7.94147 11.0667 7.89042 11.0522 7.82064 10.9991L2.08526 5.36345C1.99127 5.26865 1.99154 5.13024 2.08609 5.03569C2.18092 4.94086 2.31986 4.94086 2.41469 5.03569Z"
                   fill=""
                   stroke=""
-                  stroke-width="0.666667"
+                  strokeWidth="0.666667"
                 />
               </svg>
             </span>
@@ -67,6 +74,8 @@ const Billing = () => {
             name="address"
             id="address"
             placeholder="House number and street name"
+            value={data.address}
+            onChange={(e) => setData({ ...data, address: e.target.value })}
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
           />
         </div>
@@ -80,6 +89,8 @@ const Billing = () => {
             type="text"
             name="phone"
             id="phone"
+            value={data.phone}
+            onChange={(e) => setData({ ...data, phone: e.target.value })}
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
           />
         </div>

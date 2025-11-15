@@ -1,5 +1,6 @@
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useAppSelector } from "@/redux/store";
+import { getOrderItemsList } from "@/utils/order";
 import Link from "next/link";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -7,6 +8,8 @@ import { useSelector } from "react-redux";
 const OrderSummary = () => {
   const cartItems = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
+
+  const orderItems = getOrderItemsList(cartItems);
 
   return (
     <div className="lg:max-w-[455px] w-full">
@@ -18,14 +21,14 @@ const OrderSummary = () => {
 
         <div className="pt-2.5 pb-8.5 px-4 sm:px-8.5">
           {/* <!-- product item --> */}
-          {cartItems.map((item, key) => (
+          {orderItems.map((item, key) => (
             <div key={key} className="flex items-center gap-3 justify-between py-5 border-b border-gray-3">
               <div>
                 <p className="text-dark">{item.name}</p>
               </div>
               <div>
                 <p className="text-dark text-right line-clamp-1">
-                  {(item.price * item.quantity).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                  {item.totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
                 </p>
               </div>
             </div>
@@ -45,7 +48,7 @@ const OrderSummary = () => {
 
           {/* <!-- checkout button --> */}
           <Link
-            href="/checkout"
+            href="/account/checkout"
             className="w-full flex justify-center font-medium text-white bg-primary py-3 px-6 rounded-md ease-out duration-200 hover:bg-primary-dark mt-7.5"
           >
             Mua ngay

@@ -1,15 +1,10 @@
 import { useState } from "react";
 import SingleItem from "./SingleItem";
-import { getProvinceName } from "@/utils/provinces";
+import { getGroupByProvince, getProvinceName } from "@/utils/provinces";
 
 const CartGrouped = ({ cartItems, removeItemFromCart }) => {
   // nhóm theo province
-  const groupedByProvince = cartItems.reduce((groups, item) => {
-    const province = item.province || "Khác";
-    if (!groups[province]) groups[province] = [];
-    groups[province].push(item);
-    return groups;
-  }, {});
+  const groupedByProvince = getGroupByProvince(cartItems);
 
   // lưu trạng thái mở/đóng cho từng province
   const [open, setOpen] = useState({});

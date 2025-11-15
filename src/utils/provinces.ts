@@ -154,3 +154,11 @@ export const domainDatas = [
 
 export const getProvinceName = (pid: string) => provinceDatas.find((p) => pid === p.id)?.name;
 export const getDomainName = (did: string) => domainDatas.find((d) => did === d.id)?.name;
+
+export const getGroupByProvince = (cartItems) => cartItems.reduce((groups, item) => {
+    const province = item.province || "Khác";
+    if (item.category !== 'OPTIONAL') return groups;
+    if (!groups[province]) groups[province] = [];
+    groups[province].push(item);
+    return groups;
+  }, {});
