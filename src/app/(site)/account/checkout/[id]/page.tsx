@@ -1,19 +1,14 @@
 "use client";
 import Billing from "@/components/Checkout/Billing";
-import { selectTotalPrice } from "@/redux/features/cart-slice";
-import { useAppSelector } from "@/redux/store";
+import { useAPI } from "@/hooks/useAPI";
 import { getOrderItemsList } from "@/utils/order";
-import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 const CheckoutPage = () => {
-  const { data: session } = useSession();
+  const { id } = useParams();
 
-  const cartItems = useAppSelector((state) => state.cartReducer.items);
-  const totalPrice = useSelector(selectTotalPrice);
-
-  const orderItems = getOrderItemsList(cartItems);
+  const { API } = useAPI();
 
   const [data, setData] = useState({
     name: "",
@@ -23,15 +18,64 @@ const CheckoutPage = () => {
     note: "",
   });
 
+  const [orderItems, setOrderItems] = useState<any[]>([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  const canSubmit = data.name && data.province && data.address && data.phone && orderItems.length > 0;
+
   useEffect(() => {
-    if (session?.user) {
+    if (!id) return;
+
+    fetchOrderDetail();
+  }, [id]);
+
+  const fetchOrderDetail = async () => {
+    const res = await API.get(`/order/${id}`, false, true);
+    if (res.success) {
+      const { data } = res;
+
+      setTotalPrice(data.total);
+
       setData({
         ...data,
-        name: session.user.name || "",
-        phone: session.user.phone || "",
+        name: data.customerName,
+        province: data.customerProvince,
+        address: data.customerAddress,
+        phone: data.customerPhone,
+        note: data.note || "",
       });
+
+      const items = data.items.map((item) => {
+        const { product } = item;
+        return {
+          id: product.id,
+          name: product.name,
+          category: product.category,
+          price: product.price,
+          province: product.province,
+          quantity: item.quantity,
+        }
+      });
+
+      setOrderItems(getOrderItemsList(items));
     }
-  }, [session]);
+  }
+
+  const handleSubmit = async () => {
+    if (!canSubmit) return;
+
+    const res = await API.put(`/order/${id}`, {
+      customerName: data.name,
+      customerPhone: data.phone,
+      customerProvince: data.province,
+      customerAddress: data.address,
+      note: data.note
+    }, true, true);
+
+    if (res.success) {
+      console.log("Order updated:", res.data);
+    }
+  }
 
   return (
     <section className="overflow-hidden py-10">
@@ -39,7 +83,7 @@ const CheckoutPage = () => {
         Thông tin thanh toán
       </h1>
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-        <form>
+        <div>
           <div className="flex flex-col lg:flex-row gap-7.5 xl:gap-11">
             {/* <!-- checkout left --> */}
             <div className="lg:max-w-[670px] w-full">
@@ -115,14 +159,15 @@ const CheckoutPage = () => {
 
               {/* <!-- checkout button --> */}
               <button
-                type="submit"
-                className="w-full flex justify-center font-medium text-white bg-primary py-3 px-6 rounded-md ease-out duration-200 hover:bg-primary-dark mt-7.5"
+                onClick={handleSubmit}
+                disabled={!canSubmit}
+                className="w-full flex justify-center font-medium text-white bg-primary py-3 px-6 rounded-md ease-out duration-200 hover:bg-primary-dark mt-7.5 disabled:cursor-not-allowed"
               >
                 Xác nhận thông tin
               </button>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </section>
   );

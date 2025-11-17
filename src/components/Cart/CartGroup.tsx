@@ -26,7 +26,7 @@ const CartGroup = ({ cartItems }) => {
                 <div className="flex items-center justify-between gap-5">
                   <div className="w-full">
                     <h3 className="text-dark ease-out duration-200">
-                      {open[province] ? "▴" : "▾"} Hộp quà mix {getProvinceName(province)} {open[province] || `(${count} sản phẩm)`}
+                      {open[province] ? "▾" : "▸"} Hộp quà mix {getProvinceName(province)} {open[province] || `(${count} sản phẩm)`}
                     </h3>
                   </div>
                 </div>

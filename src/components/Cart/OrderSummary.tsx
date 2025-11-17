@@ -1,7 +1,9 @@
+import { useAPI } from "@/hooks/useAPI";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useAppSelector } from "@/redux/store";
 import { getOrderItemsList } from "@/utils/order";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useSelector } from "react-redux";
 
@@ -10,6 +12,24 @@ const OrderSummary = () => {
   const totalPrice = useSelector(selectTotalPrice);
 
   const orderItems = getOrderItemsList(cartItems);
+
+  const router = useRouter();
+
+  const { API } = useAPI();
+
+  const handleSubmit = async () => {
+    const res = await API.post('/order', {
+      items: cartItems.map(item => ({
+        productId: item.id,
+        quantity: item.quantity
+      }))
+    }, true, true);
+
+    if (res.success) {
+      console.log(res);
+      router.push('/account/checkout');
+    }
+  }
 
   return (
     <div className="lg:max-w-[455px] w-full">
@@ -47,12 +67,12 @@ const OrderSummary = () => {
           </div>
 
           {/* <!-- checkout button --> */}
-          <Link
-            href="/account/checkout"
+          <button
+            onClick={handleSubmit}
             className="w-full flex justify-center font-medium text-white bg-primary py-3 px-6 rounded-md ease-out duration-200 hover:bg-primary-dark mt-7.5"
           >
             Mua ngay
-          </Link>
+          </button>
         </div>
       </div>
     </div>
