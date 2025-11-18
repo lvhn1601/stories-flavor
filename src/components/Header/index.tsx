@@ -23,7 +23,7 @@ const Header = () => {
 
   const menuItem = [
     { title: "Tài khoản của tôi", path: "/account/profile" },
-    { title: "Đơn mua", path: "account/orders" },
+    { title: "Đơn mua", path: "/account/orders" },
     {
       title: "Đăng xuất", path: "#", action: () => {
         signOut({ callbackUrl: "/" });

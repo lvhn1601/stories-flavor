@@ -1,11 +1,10 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function AccountLayout({
+export default function AccountPageLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -17,7 +16,7 @@ export default function AccountLayout({
   const accountTabs = [
     {
       id: 1,
-      title: "Quản lý tài khoản",
+      title: "Tài khoản",
       href: "/account/profile",
       icon: (
         <svg
@@ -45,7 +44,7 @@ export default function AccountLayout({
     },
     {
       id: 2,
-      title: "Quản lý địa chỉ",
+      title: "Địa chỉ",
       href: "/account/addresses",
       icon: (
         <svg
@@ -71,8 +70,8 @@ export default function AccountLayout({
     },
     {
       id: 3,
-      title: "Đơn hàng của tôi",
-      href: "#",
+      title: "Đơn hàng",
+      href: "/account/orders",
       icon: (
         <svg
           className="fill-current"
@@ -111,19 +110,19 @@ export default function AccountLayout({
 
   return (
     <>
-      <section className="overflow-hidden py-20">
+      <section className="overflow-hidden py-5 xl:py-10">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-col xl:flex-row gap-7.5">
             {/* <!--== user dashboard menu start ==--> */}
-            <div className="xl:max-w-[370px] w-full bg-white rounded-xl shadow-lg">
+            <div className="xl:max-w-[300px] w-full bg-white rounded-xl shadow-lg">
               <div className="flex xl:flex-col">
                 <div className="p-4 sm:p-7.5 xl:p-9">
-                  <div className="flex flex-wrap xl:flex-nowrap xl:flex-col gap-4">
+                  <div className="flex flex-wrap xl:flex-nowrap xl:flex-col gap-2 xl:gap-4">
                     {accountTabs.map((tab) => (
                       <Link
                         key={tab.id}
                         href={tab.href}
-                        className={`flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-primary hover:text-white ${
+                        className={`flex items-center rounded-md gap-2.5 py-3 text-xs xl:text-base px-2 xl:px-4.5 ease-out duration-200 hover:bg-primary hover:text-white ${
                           pathname.startsWith(tab.href) ? "bg-primary text-white" : ""
                         }`}
                       >
@@ -136,7 +135,9 @@ export default function AccountLayout({
               </div>
             </div>
 
-            {children}
+            <div className="xl:max-w-[840px] w-full">
+              {children}
+            </div>
           </div>
         </div>
       </section>

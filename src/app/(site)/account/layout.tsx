@@ -1,6 +1,6 @@
 import SessionCheck from "@/components/Common/SessionCheck";
 
-export default function AdminLayout({
+export default function AccountLayout({
   children,
 }: {
   children: React.ReactNode;

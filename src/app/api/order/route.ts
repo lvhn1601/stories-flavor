@@ -3,6 +3,28 @@ import { prisma } from '@/utils/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/auth';
 
+export async function GET(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = Number(session.user.id);
+
+    const orders = await prisma.order.findMany({
+      where: { userId },
+      include: { items: true },
+      orderBy: { createdAt: "desc" }
+    });
+
+    return NextResponse.json({ data: orders }, { status: 200 });
+  } catch (error) {
+    console.error("Get Orders Error:", error);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
