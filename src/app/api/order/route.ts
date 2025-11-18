@@ -59,7 +59,7 @@ export async function POST(req: Request) {
       include: { items: true }
     });
 
-    return NextResponse.json(order, { status: 201 });
+    return NextResponse.json({ data: order, status: 201 });
 
   } catch (error) {
     console.error("Create Order Error:", error);

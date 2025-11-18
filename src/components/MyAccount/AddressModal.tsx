@@ -1,8 +1,57 @@
-import React, { useEffect } from "react";
+import { provinceDatas } from "@/utils/provinces";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
 
-const AddressModal = ({ isOpen, closeModal }) => {
+interface AddressModalProps {
+  isOpen: boolean;
+  closeModal: () => void;
+  data?: any;
+  onCreate?: (data: any) => void;
+  onUpdate?: (data: any) => void;
+}
+
+const AddressModal = ({ isOpen, closeModal, data, onCreate, onUpdate }: AddressModalProps) => {
+  const [formData, setFormData] = useState({
+    id: 0,
+    name: "",
+    phone: "",
+    province: "hanoi",
+    address: "",
+  });
+
+  const { data: session } = useSession();
+
+  const validData = formData.name && formData.phone && formData.province && formData.address;
+
   useEffect(() => {
-    // closing modal while clicking outside
+    if (data) {
+      setFormData({
+        id: data.id || 0,
+        name: data.name || "",
+        phone: data.phone || "",
+        province: data.province || "hanoi",
+        address: data.address || "",
+      });
+    } else if (session?.user) {
+      setFormData({
+        id: 0,
+        name: session.user.name || "",
+        phone: session.user.phone || "",
+        province: "hanoi",
+        address: "",
+      });
+    } else {
+      setFormData({
+        id: 0,
+        name: "",
+        phone: "",
+        province: "hanoi",
+        address: "",
+      });
+    }
+  }, [data, session])
+
+  useEffect(() => {
     function handleClickOutside(event) {
       if (!event.target.closest(".modal-content")) {
         closeModal();
@@ -18,16 +67,26 @@ const AddressModal = ({ isOpen, closeModal }) => {
     };
   }, [isOpen, closeModal]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validData) return;
+
+    if (data && onUpdate) {
+      onUpdate(formData);
+    } else if (onCreate) {
+      onCreate(formData);
+    }
+  }
+
   return (
     <div
-      className={`fixed top-0 left-0 overflow-y-auto no-scrollbar w-full h-screen sm:py-20 xl:py-25 2xl:py-[230px] bg-dark/70 sm:px-8 px-4 py-5 ${
-        isOpen ? "block z-99999" : "hidden"
-      }`}
+      className={`fixed top-0 left-0 overflow-y-auto no-scrollbar w-full h-screen sm:py-20 xl:py-25 2xl:py-[230px] bg-dark/70 sm:px-8 px-4 py-5 ${isOpen ? "block z-99999" : "hidden"
+        }`}
     >
       <div className="flex items-center justify-center ">
         <div
           x-show="addressModal"
-          className="w-full max-w-[1100px] rounded-xl shadow-3 bg-white p-7.5 relative modal-content"
+          className="w-full max-w-[600px] rounded-xl shadow-3 bg-white p-7.5 relative modal-content"
         >
           <button
             onClick={closeModal}
@@ -52,70 +111,75 @@ const AddressModal = ({ isOpen, closeModal }) => {
           </button>
 
           <div>
-            <form>
-              <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
-                <div className="w-full">
-                  <label htmlFor="name" className="block mb-2.5">
-                    Name
-                  </label>
+            <div className="w-full">
+              <label htmlFor="name" className="block mb-2.5">
+                Người nhận
+              </label>
 
-                  <input
-                    type="text"
-                    name="name"
-                    value="James Septimus"
-                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                  />
-                </div>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
 
-                <div className="w-full">
-                  <label htmlFor="email" className="block mb-2.5">
-                    Email
-                  </label>
+            <div className="w-full">
+              <label htmlFor="phone" className="block mb-2.5">
+                Số điện thoại
+              </label>
 
-                  <input
-                    type="email"
-                    name="email"
-                    value="jamse@example.com"
-                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                  />
-                </div>
-              </div>
+              <input
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
 
-              <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
-                <div className="w-full">
-                  <label htmlFor="phone" className="block mb-2.5">
-                    Phone
-                  </label>
+            <div className="w-full">
+              <label htmlFor="email" className="block mb-2.5">
+                Tỉnh thành
+              </label>
 
-                  <input
-                    type="text"
-                    name="phone"
-                    value="1234 567890"
-                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                  />
-                </div>
-
-                <div className="w-full">
-                  <label htmlFor="address" className="block mb-2.5">
-                    Address
-                  </label>
-
-                  <input
-                    type="text"
-                    name="address"
-                    value="7398 Smoke Ranch RoadLas Vegas, Nevada 89128"
-                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="inline-flex font-medium text-white bg-blue py-3 px-7 rounded-md ease-out duration-200 hover:bg-blue-dark"
+              <select
+                name="province"
+                value={formData.province}
+                onChange={e => setFormData({ ...formData, province: e.target.value })}
+                className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
               >
-                Save Changes
-              </button>
-            </form>
+                {provinceDatas.map((province) => (
+                  <option key={province.id} value={province.id}>
+                    {province.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="w-full">
+              <label htmlFor="address" className="block mb-2.5">
+                Địa chỉ cụ thể
+              </label>
+
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={e => setFormData({ ...formData, address: e.target.value })}
+                className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={!validData}
+              onClick={handleSubmit}
+              className="inline-flex mt-5 font-medium text-white bg-primary py-3 px-7 rounded-md ease-out duration-200 hover:bg-primary-dark disabled:cursor-not-allowed"
+            >
+              {data ? "Cập nhật địa chỉ" : "Thêm địa chỉ mới"}
+            </button>
           </div>
         </div>
       </div>

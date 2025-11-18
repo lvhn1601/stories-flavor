@@ -20,6 +20,7 @@ model User {
   blogs       Blog[]
   orders      Order[]
   reviews     Review[]
+  addresses   UserAddress[]
 }
 
 model Product {
@@ -71,6 +72,16 @@ model Order {
   items            OrderItem[]
 }
 
+model UserAddress {
+  id        Int     @id @default(autoincrement())
+  name      String
+  phone     String
+  province  String
+  address   String
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+}
+
 model OrderItem {
   id        Int     @id @default(autoincrement())
   orderId   Int
@@ -89,7 +100,6 @@ enum Category {
 
 enum OrderStatus {
   PENDING
-  AUTHENTICATED
   PAID
   PROCESSING
   COMPLETED

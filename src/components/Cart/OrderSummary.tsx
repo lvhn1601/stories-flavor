@@ -2,7 +2,6 @@ import { useAPI } from "@/hooks/useAPI";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useAppSelector } from "@/redux/store";
 import { getOrderItemsList } from "@/utils/order";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -26,8 +25,8 @@ const OrderSummary = () => {
     }, true, true);
 
     if (res.success) {
-      console.log(res);
-      router.push('/account/checkout');
+      const id = res.data.id;
+      router.push(`/account/checkout/${id}`);
     }
   }
 

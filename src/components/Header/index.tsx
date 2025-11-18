@@ -22,8 +22,8 @@ const Header = () => {
   const { data: session } = useSession();
 
   const menuItem = [
-    { title: "Tài khoản của tôi", path: "/profile" },
-    { title: "Đơn mua", path: "/orders" },
+    { title: "Tài khoản của tôi", path: "/account/profile" },
+    { title: "Đơn mua", path: "account/orders" },
     {
       title: "Đăng xuất", path: "#", action: () => {
         signOut({ callbackUrl: "/" });
