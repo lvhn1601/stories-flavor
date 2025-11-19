@@ -17,7 +17,7 @@ const UserDropdown = ({ user, menuItem }) => {
                     alt={user?.name ?? "User avatar"}
                     width={32}
                     height={32}
-                    className="rounded-full"
+                    className="rounded-full aspect-square object-cover"
                 />
                 {user?.name}
             </div>

@@ -94,6 +94,7 @@ export const authOptions = {
         if (user) {
           session.user.id = user.id
           session.user.phone = user.phone
+          session.user.image = user.image
           session.user.role = user.role ?? ROLE.USER
           session.user.isActivated = user.isActivated ?? false
         }
@@ -102,11 +103,22 @@ export const authOptions = {
       return session
     },
 
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, trigger, session }: any) {
+      // ✔ Initial sign-in
       if (user) {
-        token.email = user.email
+        token.id = user.id;
+        token.email = user.email;
+        token.image = user.image;
       }
-      return token
+
+      // ✔ When client calls `update()` → update token values
+      if (trigger === "update" && session?.user) {
+        token.image = session.user.image;
+        token.name = session.user.name;
+        token.phone = session.user.phone;
+      }
+
+      return token;
     },
   },
 

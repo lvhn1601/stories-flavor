@@ -122,7 +122,7 @@ export default function AccountPageLayout({
                       <Link
                         key={tab.id}
                         href={tab.href}
-                        className={`flex items-center rounded-md gap-2.5 py-3 text-xs xl:text-base px-2 xl:px-4.5 ease-out duration-200 hover:bg-primary hover:text-white ${
+                        className={`flex items-center rounded-md gap-2.5 py-3 text-xs md:text-base px-2 md:px-4.5 ease-out duration-200 hover:bg-primary hover:text-white ${
                           pathname.startsWith(tab.href) ? "bg-primary text-white" : ""
                         }`}
                       >
