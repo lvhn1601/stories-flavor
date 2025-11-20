@@ -2,6 +2,7 @@
 import Billing from "@/components/Checkout/Billing";
 import { useAPI } from "@/hooks/useAPI";
 import { getOrderItemsList } from "@/utils/order";
+import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -9,25 +10,43 @@ const CheckoutPage = () => {
   const { id } = useParams();
 
   const { API } = useAPI();
+  const { data: session, status } = useSession();
 
-  const [data, setData] = useState({
+  const [addressData, setAddressData] = useState({
     name: "",
     province: "",
     address: "",
     phone: "",
     note: "",
   });
+  const [addresses, setAddresses] = useState([]);
+
+  const [selectedAddress, setSelectedAddress] = useState<any>(null);
 
   const [orderItems, setOrderItems] = useState<any[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const canSubmit = data.name && data.province && data.address && data.phone && orderItems.length > 0;
+  const canSubmit = addressData.name && addressData.province && addressData.address && addressData.phone && orderItems.length > 0;
 
   useEffect(() => {
     if (!id) return;
 
     fetchOrderDetail();
+    fetchAddresses();
   }, [id]);
+
+  useEffect(() => {
+    if (status === "loading")
+      return;
+
+    if (!addressData.name && !addressData.phone) {
+      setAddressData({
+        ...addressData,
+        name: session.user?.name || "",
+        phone: session.user?.phone || ""
+      })
+    }
+  }, [session, status]);
 
   const fetchOrderDetail = async () => {
     const res = await API.get(`/order/${id}`, false, true);
@@ -35,15 +54,6 @@ const CheckoutPage = () => {
       const { data } = res;
 
       setTotalPrice(data.total);
-
-      setData({
-        ...data,
-        name: data.customerName,
-        province: data.customerProvince,
-        address: data.customerAddress,
-        phone: data.customerPhone,
-        note: data.note || "",
-      });
 
       const items = data.items.map((item) => {
         const { product } = item;
@@ -61,16 +71,27 @@ const CheckoutPage = () => {
     }
   }
 
+  const fetchAddresses = async () => {
+    const res = await API.get('/address', false, true);
+
+    if (res.success) {
+      setAddresses(res.data);
+    }
+  }
+
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
-    const res = await API.put(`/order/${id}`, {
-      customerName: data.name,
-      customerPhone: data.phone,
-      customerProvince: data.province,
-      customerAddress: data.address,
-      note: data.note
-    }, true, true);
+    const res = await API.put(`/order/${id}`, selectedAddress === null ? ({
+      name: addressData.name,
+      phone: addressData.phone,
+      province: addressData.province,
+      address: addressData.address,
+      note: addressData.note
+    }) : ({
+      addressId: selectedAddress,
+      note: addressData.note
+    }), true, true);
 
     if (res.success) {
       console.log("Order updated:", res.data);
@@ -89,7 +110,7 @@ const CheckoutPage = () => {
             <div className="lg:max-w-[670px] w-full">
 
               {/* <!-- billing details --> */}
-              <Billing data={data} setData={setData} />
+              <Billing data={addressData} setData={setAddressData} addresses={addresses} onSelect={(id) => {setSelectedAddress(id)}} />
 
               {/* <!-- others note box --> */}
               <div className="bg-white shadow-lg rounded-[10px] p-4 sm:p-8.5 mt-7.5">
@@ -103,8 +124,8 @@ const CheckoutPage = () => {
                     id="notes"
                     rows={5}
                     placeholder="Notes about your order, e.g. speacial notes for delivery."
-                    value={data.note}
-                    onChange={(e) => setData({ ...data, note: e.target.value })}
+                    value={addressData.note}
+                    onChange={(e) => setAddressData({ ...addressData, note: e.target.value })}
                     className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full p-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-primary/20"
                   ></textarea>
                 </div>

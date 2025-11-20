@@ -57,21 +57,6 @@ model Blog {
   author    User     @relation(fields: [authorId], references: [id])
 }
 
-model Order {
-  id               Int         @id @default(autoincrement())
-  customerName     String
-  customerPhone    String
-  customerProvince String
-  customerAddress  String
-  status           OrderStatus @default(PENDING)
-  total            Float       @default(0)
-  createdAt        DateTime    @default(now())
-  userId           Int
-  note             String?
-  user             User        @relation(fields: [userId], references: [id])
-  items            OrderItem[]
-}
-
 model UserAddress {
   id        Int     @id @default(autoincrement())
   name      String
@@ -80,6 +65,20 @@ model UserAddress {
   address   String
   userId    Int
   user      User    @relation(fields: [userId], references: [id])
+  orders    Order[]
+}
+
+model Order {
+  id               Int         @id @default(autoincrement())
+  status           OrderStatus @default(PENDING)
+  total            Float       @default(0)
+  createdAt        DateTime    @default(now())
+  userId           Int
+  addressId        Int?
+  note             String?
+  user             User        @relation(fields: [userId], references: [id])
+  address          UserAddress? @relation(fields: [addressId], references: [id])
+  items            OrderItem[]
 }
 
 model OrderItem {

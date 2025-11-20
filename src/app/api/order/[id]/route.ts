@@ -10,7 +10,7 @@ export async function GET(req: Request, { params }: any) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const id = await params.id;
+    const { id } = await params;
 
     const orderId = Number(id);
 
@@ -21,7 +21,8 @@ export async function GET(req: Request, { params }: any) {
           include: {
             product: true
           }
-        }
+        },
+        address: true
       }
     });
 
@@ -42,27 +43,46 @@ export async function GET(req: Request, { params }: any) {
 
 export async function PUT(req: Request, { params }: any) {
   try {
-    const id = await params.id;
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { id } = await params;
 
     const orderId = Number(id);
     const body = await req.json();
 
     // Các field được phép update:
     const {
-      customerName,
-      customerPhone,
-      customerProvince,
-      customerAddress,
+      addressId,
+      name,
+      phone,
+      province,
+      address,
       note
     } = body;
+
+    let selectedAddress = addressId;
+
+    if (!addressId) {
+      const newAddress = await prisma.userAddress.create({
+        data: {
+          name: name,
+          phone: phone,
+          province: province,
+          address: address,
+          userId: session.user.id,
+        }
+      });
+
+      selectedAddress = newAddress.id;
+    }
 
     const updated = await prisma.order.update({
       where: { id: orderId },
       data: {
-        customerName,
-        customerPhone,
-        customerProvince,
-        customerAddress,
+        addressId: selectedAddress,
         note,
         status: "PROCESSING"
       }

@@ -176,7 +176,7 @@ const AddressModal = ({ isOpen, closeModal, data, onCreate, onUpdate }: AddressM
               type="submit"
               disabled={!validData}
               onClick={handleSubmit}
-              className="inline-flex mt-5 font-medium text-white bg-primary py-3 px-7 rounded-md ease-out duration-200 hover:bg-primary-dark disabled:cursor-not-allowed"
+              className="inline-flex mt-5 font-medium text-white bg-primary py-2 px-5 rounded-full ease-out duration-200 hover:bg-primary-dark disabled:cursor-not-allowed"
             >
               {data ? "Cập nhật địa chỉ" : "Thêm địa chỉ mới"}
             </button>
