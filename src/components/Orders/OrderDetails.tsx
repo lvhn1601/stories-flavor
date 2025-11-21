@@ -5,9 +5,11 @@ import React, { useEffect, useState } from "react";
 import SingleProductItem from "./SingleProductItem";
 import ProductGroup from "./ProductGroup";
 import { getProvinceName } from "@/utils/provinces";
+import { useRouter } from "next/navigation";
 
-const OrderDetails = ({ orderItem }: any) => {
+const OrderDetails = ({ orderItem, role }: any) => {
   const { API } = useAPI();
+  const router = useRouter();
 
   const [orderDetails, setOrderDetails] = useState<any>(null);
 
@@ -23,6 +25,21 @@ const OrderDetails = ({ orderItem }: any) => {
     }
   }
 
+  const handleNextStep = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (nextStep.href) {
+      router.push(`${nextStep.href}/${orderItem.id}`);
+      return;
+    }
+    if (nextStep.action) {
+      const res = await API.post(nextStep.action, { id: orderItem.id }, true, true);
+      if (res.success) {
+        fetchOrder(orderItem.id);
+      }
+    }
+  }
+
   if (!orderDetails)
     return <p className="w-full text-center py-10 px-5">Loading...</p>
 
@@ -33,6 +50,8 @@ const OrderDetails = ({ orderItem }: any) => {
 
   const optionalItems = orderItems.filter((item => item.category === 'OPTIONAL'));
   const suggestItems = orderItems.filter((item => item.category !== 'OPTIONAL'));
+
+  const nextStep = getOrderStatusNextStep(orderItem.status, role);
 
   return (
     <div className="flex flex-col w-full py-10 px-5 gap-4">
@@ -170,6 +189,13 @@ const OrderDetails = ({ orderItem }: any) => {
         </div>
       )}
 
+      {orderDetails.note && (
+        <div className="px-7.5 w-full">
+          <p className="font-bold">Ghi chú:</p>
+          <p>{orderDetails.note}</p>
+        </div>
+      )}
+
       <div className="px-7.5 w-full">
         <p className="font-bold">Đơn gồm:</p>
         <div className="flex flex-col w-full">
@@ -194,10 +220,13 @@ const OrderDetails = ({ orderItem }: any) => {
         </div>
       </div>
 
-      {getOrderStatusNextStep(orderDetails.status) && (
+      {nextStep && (
         <div className="w-full flex justify-end">
-          <button className="bg-primary text-white px-4 py-1 rounded-full">
-            {getOrderStatusNextStep(orderDetails.status)} →
+          <button
+            className="bg-primary text-white px-4 py-1 rounded-full"
+            onClick={handleNextStep}
+          >
+            {nextStep.title} →
           </button>
         </div>
       )}

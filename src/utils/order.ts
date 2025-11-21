@@ -25,18 +25,41 @@ export const orderStatus = [
     id: "PENDING",
     title: "Chờ xác nhận",
     style: "text-gray-6 bg-gray-3",
-    nextStep: "Xác nhận ngay"
+    nextStep: {
+      title: "Xác nhận ngay",
+      href: "/account/checkout",
+      permission: ["user"]
+    }
+  },
+  {
+    id: "AUTHORIZED",
+    title: "Chưa thanh toán",
+    style: "text-yellow bg-yellow-light-4",
+    nextStep: {
+      title: "Thanh toán ngay",
+      href: "/account/payment",
+      permission: ["user"]
+    }
   },
   {
     id: "PROCESSING",
-    title: "Chưa thanh toán",
-    style: "text-yellow bg-yellow-light-4",
-    nextStep: "Thanh toán ngay"
-  },
-  {
-    id: "PENDING",
     title: "Đang xử lý",
     style: "text-blue bg-blue-light-4",
+    nextStep: {
+      title: "Xác nhận vận chuyển",
+      action: "/admin/orders/deliver",
+      permission: ["admin"]
+    }
+  },
+  {
+    id: "DELIVERING",
+    title: "Đang giao hàng",
+    style: "text-teal-dark bg-teal",
+    nextStep: {
+      title: "Xác nhận thành công",
+      action: "/order/complete",
+      permission: ["admin", "user"]
+    }
   },
   {
     id: "COMPLETED",
@@ -52,4 +75,4 @@ export const orderStatus = [
 
 export const getOrderStatusTitle = (status: string) => orderStatus.find(p => p.id === status)?.title;
 export const getOrderStatusStyle = (status: string) => orderStatus.find(p => p.id === status)?.style;
-export const getOrderStatusNextStep = (status: string) => orderStatus.find(p => p.id === status)?.nextStep;
+export const getOrderStatusNextStep = (status: string, role: "user" | "admin") => orderStatus.find(p => p.id === status && p.nextStep?.permission?.some(e => e === role))?.nextStep;

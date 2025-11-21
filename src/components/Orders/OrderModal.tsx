@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import OrderDetails from "./OrderDetails";
 import EditOrder from "./EditOrder";
 
-const OrderModal = ({ showDetails, showEdit, toggleModal, order }: any) => {
+const OrderModal = ({ showDetails, showEdit, toggleModal, order, role }: any) => {
   if (!showDetails && !showEdit) {
     return null;
   }
@@ -30,7 +30,7 @@ const OrderModal = ({ showDetails, showEdit, toggleModal, order }: any) => {
           </button>
 
           <div className="w-full h-auto overflow-auto max-h-full">
-            {showDetails && <OrderDetails orderItem={order} />}
+            {showDetails && <OrderDetails orderItem={order} role={role} />}
 
             {showEdit && <EditOrder order={order} toggleModal={toggleModal} />}
           </div>

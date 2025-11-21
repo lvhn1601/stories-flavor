@@ -1,4 +1,5 @@
 import { authOptions } from "@/utils/auth";
+import { MESSAGE, ROLE } from "@/utils/constant";
 import { prisma } from "@/utils/prisma";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
@@ -7,7 +8,7 @@ export async function GET(req: Request, { params }: any) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ message: MESSAGE.UNAUTHORIZED }, { status: 401 });
     }
 
     const { id } = await params;
@@ -30,14 +31,14 @@ export async function GET(req: Request, { params }: any) {
       return NextResponse.json({ message: "Order not found" }, { status: 404 });
 
     // Optional: Only allow owner to access
-    if (order.userId !== Number(session.user.id)) {
+    if (session.user.role !== ROLE.ADMIN && order.userId !== Number(session.user.id)) {
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
     return NextResponse.json({ data: order, status: 200 });
   } catch (error) {
     console.error("Get Order Detail Error:", error);
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
+    return NextResponse.json({ message: MESSAGE.SERVER_ERROR }, { status: 500 });
   }
 }
 
@@ -45,7 +46,7 @@ export async function PUT(req: Request, { params }: any) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ message: MESSAGE.UNAUTHORIZED }, { status: 401 });
     }
 
     const { id } = await params;
@@ -84,13 +85,13 @@ export async function PUT(req: Request, { params }: any) {
       data: {
         addressId: selectedAddress,
         note,
-        status: "PROCESSING"
+        status: "AUTHORIZED"
       }
     });
 
     return NextResponse.json({ data: updated, status: 200 });
   } catch (error) {
     console.error("PUT /orders/[id] error:", error);
-    return new NextResponse("Failed to update order", { status: 500 });
+    return NextResponse.json({ message: MESSAGE.SERVER_ERROR }, { status: 500 });
   }
 }

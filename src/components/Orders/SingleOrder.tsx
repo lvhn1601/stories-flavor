@@ -3,10 +3,13 @@ import OrderModal from "./OrderModal";
 import { formatDateUTC } from "@/utils/constant";
 import { getOrderStatusNextStep, getOrderStatusStyle, getOrderStatusTitle } from "@/utils/order";
 import { useRouter } from "next/navigation";
+import { useAPI } from "@/hooks/useAPI";
 
-const SingleOrder = ({ orderItem, smallView }: any) => {
+const SingleOrder = ({ orderItem, smallView, refetch }: any) => {
   const [showDetails, setShowDetails] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+
+  const { API } = useAPI();
 
   const router = useRouter();
 
@@ -23,10 +26,18 @@ const SingleOrder = ({ orderItem, smallView }: any) => {
     setShowEdit(status);
   };
 
-  const handleNextStep = (e) => {
+  const nextStep = getOrderStatusNextStep(orderItem.status, "user");
+
+  const handleNextStep = async (e) => {
     e.stopPropagation();
-    if (orderItem.status === "PENDING") {
-      router.push(`/account/checkout/${orderItem.id}`);
+    if (nextStep.href) {
+      router.push(`${nextStep.href}/${orderItem.id}`);
+      return;
+    }
+    if (nextStep.action) {
+      const res = await API.post(nextStep.action, { id: orderItem.id }, true, true);
+      if (res.success && refetch)
+        refetch();
     }
   }
 
@@ -62,12 +73,12 @@ const SingleOrder = ({ orderItem, smallView }: any) => {
           </div>
 
           <div className="flex gap-5 items-center min-w-[113px]">
-            {getOrderStatusNextStep(orderItem.status) && (
+            {nextStep && (
               <button
                 onClick={handleNextStep}
                 className="bg-primary text-white px-2 py-1 rounded-full hover:bg-primary-dark"
               >
-                {getOrderStatusNextStep(orderItem.status)}
+                {nextStep.title}
               </button>
             )}
           </div>
@@ -120,6 +131,7 @@ const SingleOrder = ({ orderItem, smallView }: any) => {
         showEdit={showEdit}
         toggleModal={toggleModal}
         order={orderItem}
+        role={"user"}
       />
     </>
   );

@@ -12,6 +12,7 @@ import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import data from "../Home/Categories/categoryData";
 import UserDropdown from "./UserDropdown";
+import { ROLE } from "@/utils/constant";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,17 +20,20 @@ const Header = () => {
   const [stickyMenu, setStickyMenu] = useState(false);
   const { openCartModal } = useCartModalContext();
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const menuItem = [
-    { title: "Tài khoản của tôi", path: "/account/profile" },
-    { title: "Đơn mua", path: "/account/orders" },
+    { title: "Trang quản lý", path: "/admin/products", permission: [ROLE.ADMIN] },
+    { title: "Tài khoản của tôi", path: "/account/profile", permission: [ROLE.USER, ROLE.ADMIN] },
+    { title: "Đơn mua", path: "/account/orders", permission: [ROLE.USER, ROLE.ADMIN] },
     {
-      title: "Đăng xuất", path: "#", action: () => {
+      title: "Đăng xuất", path: "#", permission: [ROLE.USER, ROLE.ADMIN], action: () => {
         signOut({ callbackUrl: "/" });
       }
     },
-  ]
+  ];
+
+  const getMenuItems = (role) => menuItem.filter(item => item.permission.some(p => p === role));
 
   const handleOpenCartModal = () => {
     openCartModal();
@@ -68,7 +72,7 @@ const Header = () => {
 
               <div className="hidden xl:flex w-full lg:w-auto justify-between items-center gap-5">
                 {session?.user ? (
-                  <UserDropdown user={session.user} menuItem={menuItem} />
+                  <UserDropdown user={session.user} menuItem={getMenuItems(session.user.role)} />
                 ) : (
                   <div className="flex items-center gap-5">
                     <Link href="/signup" className="flex items-center gap-2.5">

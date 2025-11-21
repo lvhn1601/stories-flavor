@@ -56,7 +56,7 @@ const OrdersPage = () => {
             )}
             {orders.length > 0 ? (
               orders.map((orderItem, key) => (
-                <SingleOrder key={key} orderItem={orderItem} smallView={false} />
+                <SingleOrder key={key} orderItem={orderItem} smallView={false} refetch={fetchOrders} />
               ))
             ) : (
               <p className="py-9.5 px-4 sm:px-7.5 xl:px-10">
@@ -68,7 +68,7 @@ const OrdersPage = () => {
           <div className="flex flex-col gap-4 p-2">
             {orders.length > 0 &&
               orders.map((orderItem, key) => (
-                <SingleOrder key={key} orderItem={orderItem} smallView={true} />
+                <SingleOrder key={key} orderItem={orderItem} smallView={true} refetch={fetchOrders} />
               ))}
           </div>
         </div>

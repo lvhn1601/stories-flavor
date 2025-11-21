@@ -70,7 +70,7 @@ export const adminMenuData: Menu[] = [
     id: 3,
     title: "Quản lý đơn hàng",
     newTab: false,
-    path: "/contact",
+    path: "/admin/orders",
   },
   {
     id: 4,

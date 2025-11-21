@@ -14,7 +14,7 @@ const AdminHeader = () => {
   const { data: session } = useSession();
 
   const menuItem = [
-    { title: "Tài khoản của tôi", path: "/profile" },
+    { title: "Tài khoản của tôi", path: "/account/profile" },
     {
       title: "Đăng xuất", path: "#", action: () => {
         signOut({ callbackUrl: "/" });

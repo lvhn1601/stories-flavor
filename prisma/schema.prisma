@@ -76,6 +76,7 @@ model Order {
   userId           Int
   addressId        Int?
   note             String?
+  cancelReason     String?
   user             User        @relation(fields: [userId], references: [id])
   address          UserAddress? @relation(fields: [addressId], references: [id])
   items            OrderItem[]
@@ -99,8 +100,10 @@ enum Category {
 
 enum OrderStatus {
   PENDING
+  AUTHORIZED
   PAID
   PROCESSING
+  DELIVERING
   COMPLETED
   CANCELLED
 }
