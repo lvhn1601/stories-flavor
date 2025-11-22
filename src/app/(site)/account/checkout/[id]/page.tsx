@@ -26,7 +26,9 @@ const CheckoutPage = () => {
   const [orderItems, setOrderItems] = useState<any[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const canSubmit = addressData.name && addressData.province && addressData.address && addressData.phone && orderItems.length > 0;
+  const canSubmit = selectedAddress !== null || (addressData.name && addressData.province && addressData.address && addressData.phone && orderItems.length > 0);
+  
+  console.log(canSubmit);
 
   useEffect(() => {
     if (!id) return;
