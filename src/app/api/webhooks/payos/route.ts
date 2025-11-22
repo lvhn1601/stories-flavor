@@ -4,13 +4,11 @@ import { PAYOS } from "@/utils/payos";
 
 export async function POST(req: Request) {
   try {
-    console.log("Webhook received!");
     const body = await req.json();
-    console.log("Webhook body:", body);
 
     const data = PAYOS.verifyPaymentWebhookData(body);
 
-    if (data.code === "SUCCESS") {
+    if (data.desc === "success") {
       const order = await prisma.order.findFirst({
         where: { orderCode: Number(data.orderCode) },
       });
