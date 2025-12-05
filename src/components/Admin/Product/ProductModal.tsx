@@ -32,6 +32,7 @@ const ProductModal = ({
     price: 0,
     province: "",
     images: [],
+    isFeatured: false,
   });
   const [error, setError] = useState<string | null>(null);
 
@@ -46,6 +47,7 @@ const ProductModal = ({
       price: 0,
       province: "",
       images: [],
+      isFeatured: false,
     });
 
     setPreviewImages([]);
@@ -64,6 +66,7 @@ const ProductModal = ({
         price: product.price,
         province: product.province || "",
         images: product.images || [],
+        isFeatured: product.isFeatured
       });
       setPreviewImages(product.images || []);
     } else {
@@ -259,6 +262,24 @@ const ProductModal = ({
               required
               className="w-full border border-gray-3 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
             />
+          </div>
+
+          <div>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="isFeatured"
+                checked={formData.isFeatured || false}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    isFeatured: e.target.checked,
+                  }))
+                }
+                className="w-4 h-4 rounded border-gray-3 focus:ring-2 focus:ring-primary"
+              />
+              <span className="text-sm font-medium text-gray-7">Sản phẩm nổi bật</span>
+            </label>
           </div>
 
           {/* Product Name */}

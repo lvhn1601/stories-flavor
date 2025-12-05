@@ -6,5 +6,6 @@ export type Product = {
   price: number;
   province: string;
   images: string[];
+  isFeatured: boolean;
   status?: boolean;
 };

@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ProductItem from "@/components/Common/ProductItem";
 import shopData from "@/components/Shop/shopData";
+import { useAPI } from "@/hooks/useAPI";
+import { Product } from "@/types/product";
 
 const Collection = () => {
+  const { API } = useAPI();
+
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    fetchFeaturedProducts();
+  }, []);
+
+  const fetchFeaturedProducts = async () => {
+    const res = await API.get("/product/featured", false, true);
+    if (res.success) {
+      setProducts(res.data);
+    }
+  }
+
+  console.log(products);
+
   return (
     <section className="overflow-hidden pt-10">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -24,7 +43,7 @@ const Collection = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7.5 gap-y-9">
           {/* <!-- New Arrivals item --> */}
-          {shopData.slice(0, 4).map((item, key) => (
+          {products.map((item, key) => (
             <ProductItem item={item} key={key} isPreview />
           ))}
         </div>
