@@ -1,5 +1,5 @@
 import { useAPI } from "@/hooks/useAPI";
-import { selectTotalPrice } from "@/redux/features/cart-slice";
+import { selectTotalPrice } from "@/redux/features/checkout-slice";
 import { useAppSelector } from "@/redux/store";
 import { getOrderItemsList } from "@/utils/order";
 import { useRouter } from "next/navigation";
@@ -7,7 +7,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 const OrderSummary = () => {
-  const cartItems = useAppSelector((state) => state.cartReducer.items);
+  const cartItems = useAppSelector((state) => state.checkoutReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
 
   const orderItems = getOrderItemsList(cartItems);

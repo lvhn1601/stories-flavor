@@ -5,8 +5,11 @@ import Image from "next/image";
 import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { useAPI } from "@/hooks/useAPI";
 import { Product } from "@prisma/client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Review } from "@/types/review";
+import { useDispatch } from "react-redux";
+import { setCheckoutItem } from "@/redux/features/checkout-slice";
+import { updateproductDetails } from "@/redux/features/product-details";
 
 const ShopDetailsPage = () => {
   const { openPreviewModal } = usePreviewSlider();
@@ -20,10 +23,20 @@ const ShopDetailsPage = () => {
   const { id } = useParams();
   const { API } = useAPI();
 
+  const dispatch = useDispatch();
+
+  const router = useRouter();
+
   useEffect(() => {
     loadProduct();
     loadReview();
   }, []);
+
+  useEffect(() => {
+    if (product !== null) {
+      dispatch(updateproductDetails(product));
+    }
+  }, [product]);
 
   const loadProduct = async () => {
     const res = await API.get(`/product?id=${id}`, false, true);
@@ -33,6 +46,22 @@ const ShopDetailsPage = () => {
   const loadReview = async () => {
     const res = await API.get(`/product-review?pid=${id}`, false, true);
     if (res.success) setReviews(res.data);
+  }
+
+  const handleBuy = (e) => {
+    e.preventDefault();
+
+    dispatch(setCheckoutItem({
+      id: product.id,
+      name: product.name,
+      category: product.category,
+      price: product.price,
+      province: product.province,
+      images: product.images,
+      quantity: quantity,
+    }));
+
+    router.push("/account/cart");
   }
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
@@ -68,7 +97,7 @@ const ShopDetailsPage = () => {
                 <button
                   onClick={openPreviewModal}
                   aria-label="button for zoom"
-                  className="gallery__Image w-11 h-11 rounded-[5px] bg-gray-1 shadow-1 flex items-center justify-center ease-out duration-200 text-dark hover:text-blue absolute top-4 lg:top-6 right-4 lg:right-6 z-50"
+                  className="gallery__Image w-11 h-11 rounded-[5px] bg-gray-1 shadow-1 flex items-center justify-center ease-out duration-200 text-dark hover:text-primary absolute top-4 lg:top-6 right-4 lg:right-6 z-50"
                 >
                   <svg
                     className="fill-current"
@@ -133,7 +162,7 @@ const ShopDetailsPage = () => {
                 <div className="flex items-center border border-gray-3 rounded-md">
                   <button
                     onClick={() => quantity > 1 && setQuantity(quantity - 1)}
-                    className="w-10 h-10 flex items-center justify-center hover:text-blue transition"
+                    className="w-10 h-10 flex items-center justify-center hover:text-primary transition"
                   >
                     −
                   </button>
@@ -142,14 +171,26 @@ const ShopDetailsPage = () => {
                   </span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 flex items-center justify-center hover:text-blue transition"
+                    className="w-10 h-10 flex items-center justify-center hover:text-primary transition"
                   >
                     +
                   </button>
                 </div>
 
-                <button className="bg-primary hover:bg-primary-dark text-white font-medium px-6 py-3 rounded-md transition">
+                <button
+                  className="bg-primary hover:bg-primary-dark text-white font-medium px-6 py-3 rounded-md transition"
+                  onClick={handleBuy}
+                >
                   Mua ngay
+                </button>
+
+                hoặc
+
+                <button
+                  className="bg-gray-1 hover:bg-gray-3 text-primary font-medium px-6 py-3 rounded-md transition"
+                  onClick={handleBuy}
+                >
+                  Thêm vào giỏ hàng
                 </button>
               </div>
 

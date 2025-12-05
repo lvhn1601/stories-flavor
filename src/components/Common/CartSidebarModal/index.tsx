@@ -7,11 +7,13 @@ import {
   selectTotalPrice,
 } from "@/redux/features/cart-slice";
 import { useAppSelector } from "@/redux/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import CartGrouped from "./CartGroup";
 import EmptyCart from "./EmptyCart";
 import SingleItem from "./SingleItem";
+import { setCheckoutItems } from "@/redux/features/checkout-slice";
+import { useRouter } from "next/navigation";
 
 const CartSidebarModal = () => {
   const { isCartModalOpen, closeCartModal } = useCartModalContext();
@@ -21,6 +23,10 @@ const CartSidebarModal = () => {
   const suggestItems = cartItems.filter((item => item.category !== 'OPTIONAL'));
 
   const totalPrice = useSelector(selectTotalPrice);
+
+  const dispatch = useDispatch();
+
+  const router = useRouter();
 
   useEffect(() => {
     // closing modal while clicking outside
@@ -38,6 +44,16 @@ const CartSidebarModal = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isCartModalOpen, closeCartModal]);
+
+  const handleBuy = (e) => {
+    e.preventDefault();
+
+    closeCartModal();
+
+    dispatch(setCheckoutItems(cartItems));
+
+    router.push("/account/cart");
+  }
 
   return (
     <div
@@ -84,13 +100,15 @@ const CartSidebarModal = () => {
                   <span className="w-full flex justify-center">
                     <h3 className="font-medium text-white text-md sm:text-lg bg-primary rounded-xl px-3 mb-3">Sản phẩm đề xuất</h3>
                   </span>
-                  {suggestItems.map((item, key) => (
-                    <SingleItem
-                      key={key}
-                      item={item}
-                      removeItemFromCart={removeItemFromCart}
-                    />
-                  ))}
+                  <div className="flex flex-col gap-2">
+                    {suggestItems.map((item, key) => (
+                      <SingleItem
+                        key={key}
+                        item={item}
+                        removeItemFromCart={removeItemFromCart}
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
               {optionalItems.length > 0 && (
@@ -113,13 +131,12 @@ const CartSidebarModal = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              <Link
-                onClick={() => closeCartModal()}
-                href="/account/cart"
+              <button
+                onClick={handleBuy}
                 className="w-full flex justify-center font-medium text-white bg-primary py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-primary-dark"
               >
                 Mua hàng
-              </Link>
+              </button>
             </div>
           </div>
         </div>

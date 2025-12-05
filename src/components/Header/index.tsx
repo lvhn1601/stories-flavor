@@ -6,7 +6,7 @@ import { menuData } from "./menuData";
 import Dropdown from "./Dropdown";
 import { useAppSelector } from "@/redux/store";
 import { useSelector } from "react-redux";
-import { selectTotalPrice } from "@/redux/features/cart-slice";
+import { selectCartCount, selectTotalPrice } from "@/redux/features/cart-slice";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
@@ -21,6 +21,8 @@ const Header = () => {
   const { openCartModal } = useCartModalContext();
 
   const { data: session, status } = useSession();
+
+  const cartCount = useSelector(selectCartCount);
 
   const menuItem = [
     { title: "Trang quản lý", path: "/admin/products", permission: [ROLE.ADMIN] },
@@ -229,9 +231,9 @@ const Header = () => {
                       />
                     </svg>
 
-                    {/* <span className="flex items-center justify-center font-medium text-2xs absolute -right-2 -top-2.5 bg-primary-hover w-4.5 h-4.5 rounded-full text-white">
-                      {product.length}
-                    </span> */}
+                    <span className="flex items-center justify-center font-medium text-2xs absolute -right-2 -top-2.5 bg-primary-hover w-4.5 h-4.5 rounded-full text-white">
+                      {cartCount}
+                    </span>
                   </span>
                 </button>
               </div>

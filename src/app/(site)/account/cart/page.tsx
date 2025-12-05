@@ -7,7 +7,7 @@ import CartGroup from "@/components/Cart/CartGroup";
 import OrderSummary from "@/components/Cart/OrderSummary";
 
 const CartPage = () => {
-  const cartItems = useAppSelector((state) => state.cartReducer.items);
+  const cartItems = useAppSelector((state) => state.checkoutReducer.items);
 
   const optionalItems = cartItems.filter((item => item.category === 'OPTIONAL'));
   const suggestItems = cartItems.filter((item => item.category !== 'OPTIONAL'));

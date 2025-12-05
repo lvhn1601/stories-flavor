@@ -1,5 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { toast } from "sonner";
 
 type InitialState = {
   items: CartItem[];
@@ -28,9 +29,7 @@ export const cart = createSlice({
         action.payload;
       const existingItem = state.items.find((item) => item.id === id);
 
-      if (existingItem) {
-        existingItem.quantity += quantity;
-      } else {
+      if (!existingItem) {
         state.items.push({
           id,
           name,
@@ -40,6 +39,8 @@ export const cart = createSlice({
           province,
           images,
         });
+
+        toast.success(`Đã thêm ${name} vào giỏ hàng`);
       }
     },
     removeItemFromCart: (state, action: PayloadAction<number>) => {
@@ -70,6 +71,10 @@ export const selectTotalPrice = createSelector([selectCartItems], (items) => {
   return items.reduce((total, item) => {
     return total + item.price * item.quantity;
   }, 0);
+});
+
+export const selectCartCount = createSelector([selectCartItems], (items) => {
+  return items.reduce((total, item) => total + 1, 0);
 });
 
 export const {
