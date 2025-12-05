@@ -1,6 +1,4 @@
 import React from "react";
-import ProductItem from "@/components/Common/ProductItem";
-import shopData from "@/components/Shop/shopData";
 import Image from "next/image";
 
 const values = [

@@ -55,12 +55,6 @@ export const menuData: Menu[] = [
 
 export const adminMenuData: Menu[] = [
   {
-    id: 1,
-    title: "Thống kê",
-    newTab: false,
-    path: "/admin",
-  },
-  {
     id: 2,
     title: "Quản lý sản phẩm",
     newTab: false,
