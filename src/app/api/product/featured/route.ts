@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     });
 
     return NextResponse.json({
-      data: products.slice(0, 4)
+      data: products.slice(0, 3)
     }, { status: 200 });
 
   } catch (error) {

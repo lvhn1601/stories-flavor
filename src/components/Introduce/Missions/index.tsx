@@ -10,16 +10,18 @@ const Missions = () => {
         </h2>
 
         <p>
-          Mang tinh hoa ẩm thực và văn hóa Việt đến gần hơn với người Việt trẻ, doanh nghiệp và bạn bè quốc tế.
+          Trở thành nền tảng bán combo đặc sản vùng miền hàng đầu Việt Nam, mang
+          tinh hoa ẩm thực và văn hóa địa phương đến với khách hàng trong và
+          ngoài nước. Stories Flavor hướng tới việc góp phần xây dựng thương
+          hiệu Việt trên bản đồ thương mại điện tử khu vực và quốc tế.
         </p>
       </div>
 
       <Image
-        src="/images/promo/promo-01.png"
+        src="/images/mission.png"
         alt="promo img"
         width={274}
         height={350}
-        className="shadow-xl"
       />
     </div>
   );

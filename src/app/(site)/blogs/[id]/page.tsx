@@ -60,7 +60,7 @@ const BlogDetailsPage = () => {
 
                 <div className={`flex items-center gap-2 text-custom-sm font-medium`}>
                   <Image
-                    src={blog.author.image ?? "/images/users/user-01.jpg"}
+                    src={blog.author.image ?? "/images/default-avatar.jpg"}
                     alt={blog.author.name ?? "User avatar"}
                     width={32}
                     height={32}

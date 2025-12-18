@@ -67,7 +67,7 @@ const Teams = () => {
 
                 <Swiper
                     ref={sliderRef}
-                    slidesPerView={5}
+                    slidesPerView={4}
                     spaceBetween={20}
                     breakpoints={{
                         // when window width is >= 640px

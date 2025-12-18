@@ -21,27 +21,38 @@ const HeroCarousal = () => {
         clickable: true,
       }}
       modules={[Autoplay, Pagination]}
-      className="hero-carousel max-h-[650px]"
+      className="hero-carousel aspect-[16/8]"
     >
       <SwiperSlide>
-        <div className="flex items-center pt-6 sm:pt-0 flex-col-reverse sm:flex-row">
+        <div className="flex justify-center w-full items-center pt-6 sm:pt-0 flex-col-reverse sm:flex-row">
           <Image
-            src="/images/hero/hero.jpg"
-            alt="headphone"
+            src="/images/hero/hero-0.png"
+            alt="0"
             className="w-full object-cover"
             width={1080}
-            height={358}
+            height={1080}
           />
         </div>
       </SwiperSlide>
       <SwiperSlide>
         <div className="flex items-center pt-6 sm:pt-0 flex-col-reverse sm:flex-row">
           <Image
-            src="/images/hero/hero2.png"
-            alt="headphone"
+            src="/images/hero/hero-1.png"
+            alt="1"
             className="w-full object-cover"
             width={1080}
-            height={358}
+            height={1080}
+          />
+        </div>
+      </SwiperSlide>
+      <SwiperSlide>
+        <div className="flex items-center pt-6 sm:pt-0 flex-col-reverse sm:flex-row">
+          <Image
+            src="/images/hero/hero-2.png"
+            alt="2"
+            className="w-full object-cover"
+            width={1080}
+            height={1080}
           />
         </div>
       </SwiperSlide>

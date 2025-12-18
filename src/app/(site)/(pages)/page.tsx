@@ -14,7 +14,7 @@ export default function HomePage() {
       <Stages />
       <Collection />
       <Testimonials />
-      <Stories />
+      {/* <Stories /> */}
       <PromoBanner />
     </main>
   );

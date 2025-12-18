@@ -17,12 +17,10 @@ const Collection = () => {
     if (res.success) {
       setProducts(res.data);
     }
-  }
-
-  console.log(products);
+  };
 
   return (
-    <section className="overflow-hidden pt-10">
+    <section className="overflow-hidden">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
         {/* <!-- section title --> */}
         <div className="mb-7 flex items-center justify-between">
@@ -38,7 +36,7 @@ const Collection = () => {
           </Link> */}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7.5 gap-y-9">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-7.5 gap-y-9">
           {/* <!-- New Arrivals item --> */}
           {products.map((item, key) => (
             <ProductItem item={item} key={key} isPreview />
