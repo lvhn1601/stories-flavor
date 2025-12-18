@@ -12,6 +12,6 @@ export const partnersData = [
     {
         id: 3,
         name: "Công Ty Tân Huế Viên",
-        photo: "/images/partners/partner-3.jfif",
+        photo: "/images/partners/partner-3.png",
     },
 ];
